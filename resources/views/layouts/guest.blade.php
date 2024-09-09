@@ -4,7 +4,7 @@
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <meta name="csrf-token" content="{{ csrf_token() }}">
-
+        <link rel="icon" type="image/png" href="{{ asset('logo.png') }}"/>
         <title>{{ config('app.name', 'Laravel') }}</title>
 
         <!-- Fonts -->
@@ -17,7 +17,7 @@
         <!-- Styles -->
         @livewireStyles
     </head>
-    <body>
+    <body style="background: url({{ asset('backend/images/authentication/img-auth-bg.jpg') }})">
         <div class="font-sans text-gray-900 antialiased">
             {{ $slot }}
         </div>

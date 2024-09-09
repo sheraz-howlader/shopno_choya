@@ -1,11 +1,13 @@
 @props([
     'id' => '' ,
     'thead' => '',
-    'tbody' => ''
+    'tbody' => '',
+    'class' => 'table-bordered',
+    'head_class' => ''
 ])
 
-<table id="{{ $id }}" class="table table-bordered nowrap dataTable table-hover">
-    <thead> {{ $thead }} </thead>
+<table id="{{ $id }}" class="table nowrap table-hover {{$class}}">
+    <thead class="{{$head_class}}"> {{ $thead }} </thead>
     <tbody> {{ $tbody }} </tbody>
 </table>
 

@@ -1,119 +1,71 @@
 <?php
 
-namespace App\Http\Controllers\Backend;
+namespace App\Http\Controllers;
 
-use App\Http\Controllers\Controller;
-use App\Models\Module;
+use App\Models\PermissionModule;
 use App\Models\Role;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Str;
+use Symfony\Component\HttpFoundation\Response;
 
-class roleController extends Controller
+class RoleController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function index()
     {
-        Gate::authorize('role.index');
+        abort_if(Gate::none(['role::list']), Response::HTTP_FORBIDDEN);
 
-        $roles = Role::all();
-        return view('backend.roles.index',compact('roles'));
+        $roles = Role::withCount('permissions')->roles(); // roles() is a scope
+        return view('backend.roles.index', compact('roles'));
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function create()
     {
-        Gate::authorize('role.create');
+        abort_if(Gate::none(['role::create']), Response::HTTP_FORBIDDEN);
 
-        $modules = Module::all();
-        return view('backend.roles.form',compact('modules'));
+        $modules = PermissionModule::all();
+        return view('backend.roles.create', compact('modules'));
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
+    public function show(Role $role)
+    {
+    }
+
     public function store(Request $request)
     {
-        Gate::authorize('role.create');
+        abort_if(Gate::none(['role::create']), Response::HTTP_FORBIDDEN);
 
-        Role::create([
-            'name'  => $request->name,
-            'slug'  => Str::slug($request->name)
-        ])->permissions()->sync($request->input('permission', [] ));
-
-        notify()->success("Role Added","Success");
-        return redirect()->route('roles.index');
-    }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Models\role  $role
-     * @return \Illuminate\Http\Response
-     */
-    public function show(role $role)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Models\role  $role
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(role $role)
-    {
-        Gate::authorize('role.edit');
-
-        $modules = Module::all();
-        return view('backend.roles.edit',compact('modules','role'));
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\role  $role
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, role $role)
-    {
-        Gate::authorize('role.edit');
-
-        $role->update([
-            'name' => $request->name,
-            'slug' => Str::slug($request->name),
+        $role = Role::create([
+            'name' => $request->role_name,
+            'slug' => Str::slug($request->role_name),
         ]);
-        $role->permissions()->sync($request->input('permission',[]) );
-        notify()->success("Role Updated","Success");
-        return redirect()->route('roles.index');
+
+        $role->permissions()->sync($request->permissions);
+        return redirect()->route('roles.index')->with('success', 'Role create & permission sync successfully.');
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Models\role  $role
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy(role $role)
+    function edit(Role $role)
     {
-        Gate::authorize('role.destroy');
+        abort_if(Gate::none(['role::edit']), Response::HTTP_FORBIDDEN);
+
+        $modules = PermissionModule::all();
+        return view('backend.roles.edit', compact('role', 'modules'));
+    }
+
+    public function update(Request $request, Role $role)
+    {
+        abort_if(Gate::none(['role::edit']), Response::HTTP_FORBIDDEN);
+
+        $role->permissions()->sync($request->permissions);
+        //return redirect()->route('roles.index')->with('success', 'Role permission sync successfully.');
+        return back();
+    }
+
+    public function destroy(Role $role)
+    {
+        abort_if(Gate::none(['role::destroy']), Response::HTTP_FORBIDDEN);
 
         $role->delete();
-
-        notify()->warning("Role Deleted","Success");
-        return redirect()->route('roles.index');
+        return redirect()->back()->with('success', 'Role delete & permission remove successfully.');
     }
 }

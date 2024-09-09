@@ -2,14 +2,14 @@
 <html>
 
 <head>
-    <title> SCSS </title>
+    <title> {{ config('app.name') }} </title>
 
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0, minimal-ui">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="csrf-token" content="{{ csrf_token() }}">
-    <meta name="description" content="SaaS & Inventory Software">
-    <meta name="keywords" content="SaaS & Inventory Software">
+    <meta name="description" content="{{ config('app.name') }}">
+    <meta name="keywords" content="{{ config('app.name') }}">
     <meta name="author" content="Sheraz Howlader">
 
     <link rel="icon" type="image/png" href="{{ asset('logo.png') }}"/>
@@ -27,11 +27,12 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/material-icons@1.13.12/iconfont/material-icons.min.css">
 
     {{--icheck--}}
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/icheck-bootstrap/3.0.1/icheck-bootstrap.min.css">
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/icheck-bootstrap/3.0.1/icheck-bootstrap.min.css">
 
     @stack('styles')
     <style>
-        .required::after{
+        .required::after {
             content: '*';
             color: red;
         }
@@ -48,9 +49,9 @@
     </div>
 </div>
 
-@include('backend.layout.sidebar')
+@include('backend.layouts.sidebar')
 
-@include('backend.layout.header')
+@include('backend.layouts.header')
 
 <div class="pc-container">
     <div class="pc-content">
@@ -76,12 +77,15 @@
 <script src="{{ url('backend/js/fonts/custom-font.js') }}" type="6c705b80c5ee6d73b3f92550-text/javascript"></script>
 <script src="{{ url('backend/js/pcoded.js') }}" type="6c705b80c5ee6d73b3f92550-text/javascript"></script>
 <script src="{{ url('backend/js/plugins/feather.min.js') }}" type="6c705b80c5ee6d73b3f92550-text/javascript"></script>
-<script src="{{ url('backend/js/rocket-loader.min.js') }}" data-cf-settings="6c705b80c5ee6d73b3f92550-|49" defer></script>
+<script src="{{ url('backend/js/rocket-loader.min.js') }}" data-cf-settings="6c705b80c5ee6d73b3f92550-|49"
+        defer></script>
 
 <script src="{{ ('backend/js/plugins/apexcharts.min.js ') }}" type="6c705b80c5ee6d73b3f92550-text/javascript"></script>
 <script src="https://cdn.jsdelivr.net/npm/phosphor-icons@1.4.2/src/index.min.js"></script>
 
 @stack('scripts')
+@include('sweetalert::alert')
 @routes
+
 </body>
 </html>

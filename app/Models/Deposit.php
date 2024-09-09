@@ -4,10 +4,12 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Deposit extends Model
 {
-    protected $fillable = ['user_id', 'amount', 'payment_status', 'payment_at','remark'];
+    use SoftDeletes;
+    protected $fillable = ['user_id', 'amount', 'payment_status', 'payment_at','remark', 'is_adjustment'];
 
     protected $casts = [
         'payment_at' => 'datetime',

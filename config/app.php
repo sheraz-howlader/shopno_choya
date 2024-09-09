@@ -15,6 +15,7 @@ return [
 
     'name' => env('APP_NAME', 'Laravel'),
     'version' => '1.0',
+    'placeholder' => 'backend/images/users/avatar.jpg',
 
     /*
     |--------------------------------------------------------------------------

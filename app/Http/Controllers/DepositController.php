@@ -7,6 +7,7 @@ use App\Models\User;
 use App\Services\Category\CategoryServices;
 use App\Services\DataTableFilterService;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Gate;
 use Symfony\Component\HttpFoundation\Response;
 
 class DepositController extends Controller
@@ -16,6 +17,8 @@ class DepositController extends Controller
 
     public function index()
     {
+        abort_if(Gate::none(['deposit::list']), Response::HTTP_FORBIDDEN);
+
         $search   = request()->get('search');
         $filters  = request()->get('filter');
 
@@ -35,10 +38,10 @@ class DepositController extends Controller
             ->when(isset($filters['date']), function ($query) use ($filters) {
                 $query->where('payment_at', $filters['date']);
             })
-            ->paginate()
+            ->paginate(10)
             ->withQueryString();
 
-        return view('backend.deposit.index', compact('users', 'deposits', 'search', 'filters'));
+        return view('backend.deposits.index', compact('users', 'deposits', 'search', 'filters'));
     }
 
     public function getAllDeposits(Request $request): void
@@ -79,8 +82,18 @@ class DepositController extends Controller
         echo json_encode($json_data);
     }
 
+    public function create()
+    {
+    }
+
+    public function show(Deposit $deposit)
+    {
+    }
+
     public function store(Request $request)
     {
+        abort_if(Gate::none(['deposit::create']), Response::HTTP_FORBIDDEN);
+
         $request->validate([
             'user_id' => 'required',
             'amount' => 'required',
@@ -102,13 +115,17 @@ class DepositController extends Controller
 
     public function edit(Request $request, $id)
     {
+        abort_if(Gate::none(['deposit::edit']), Response::HTTP_FORBIDDEN);
         abort_if(!$request->ajax(), Response::HTTP_FORBIDDEN);
 
         $deposit = Deposit::findOrFail($id);
         return response()->json(['deposit' => $deposit]);
     }
+
     public function update(Request $request, $id)
     {
+        abort_if(Gate::none(['deposit::edit']), Response::HTTP_FORBIDDEN);
+
         $request->validate([
             'user_id' => ['required', 'exists:users,id'],
             'amount' => 'required',
@@ -132,6 +149,8 @@ class DepositController extends Controller
 
     public function destroy($id)
     {
+        abort_if(Gate::none(['deposit::destroy']), Response::HTTP_FORBIDDEN);
+
         $deposit = Deposit::findOrFail($id);
         $deposit->delete();
 
@@ -140,10 +159,13 @@ class DepositController extends Controller
 
     public function approveDeposits($id)
     {
+        abort_if(Gate::none(['deposit::deposit-approve']), Response::HTTP_FORBIDDEN);
+
         $deposit = Deposit::findOrFail($id);
         $deposit->update([
             'payment_status' => 'confirm'
         ]);
+
         return response()->json(['deposit' => $deposit]);
     }
 }

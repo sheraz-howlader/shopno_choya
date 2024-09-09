@@ -19,8 +19,10 @@ return new class extends Migration
             $table->enum('payment_status', ['pending','confirm','reject', 'draft'])->default('pending');
             $table->date('payment_at')->nullable();
             $table->string('remark')->nullable();
+            $table->boolean('is_adjustment')->nullable();
             $table->string('created_by')->nullable();
             $table->string('updated_by')->nullable();
+            $table->string('deleted_at')->nullable();
             $table->timestamps();
         });
     }

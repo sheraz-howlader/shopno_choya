@@ -51,3 +51,28 @@ mdsherazhowlader@gmail.com
 Pa$$w0rd!
 
 
+***adjustment korle adjustment + deposit a new data porbe
+
+ 2 ta 3 mas age confirm
+    2024-06-05
+
+TODO::
+    last 2 mas a kar kar pending ache __done
+    user approve er option banate hobe
+    user active na hole take ekta page a niye jete hobe(page a thake je keno se dhukte parteche na) __done
+    member a search & filter lagbe
+    deposit & adjustment a statement upload add korte hobe
+    deposit & adjustment a datepicker add korte hobe
+
+
+=====================================================
+3rt party provider register -
+    bootstrap/providers.php
+        //array er vitore class file link koralei hobe
+
+Middleware register -
+    bootstrap/app.php -
+        $middleware->append( PermissionCheck::class);
+        $middleware->alias([
+            'is_active' => App\Http\Middleware\IsActive::class,
+        ]);

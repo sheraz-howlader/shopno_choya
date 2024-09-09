@@ -1,5 +1,7 @@
 <?php
 
+use App\Http\Middleware\IsActive;
+use App\Http\Middleware\PermissionCheck;
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
@@ -12,8 +14,13 @@ return Application::configure(basePath: dirname(__DIR__))
         health: '/up',
     )
     ->withMiddleware(function (Middleware $middleware) {
-        //
+        $middleware->append( PermissionCheck::class);
+
+        $middleware->alias([
+            'is_active' => IsActive::class,
+        ]);
     })
+
     ->withExceptions(function (Exceptions $exceptions) {
         //
     })->create();
