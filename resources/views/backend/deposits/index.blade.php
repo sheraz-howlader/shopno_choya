@@ -73,7 +73,7 @@
                     <div class="dt-responsive">
                         <div id="dom-jqry_wrapper" class="dt-container dt-bootstrap5">
                             <div class="row mt-2 justify-content-md-center">
-                                <div class="col-12 table-responsive ">
+                                <div class="col-12 table-responsive">
                                     <x-data-table id="deposit_list">
                                         <x-slot:thead>
                                             <tr>

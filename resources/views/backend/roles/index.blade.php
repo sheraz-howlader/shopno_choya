@@ -16,7 +16,8 @@
 
             <div class="card">
                 <div class="card-body">
-                    <x-data-table>
+                    <div class="table-responsive">
+                        <x-data-table>
                         <x-slot:thead>
                             <tr>
                                 <th class="text-center">Name</th>
@@ -59,6 +60,7 @@
                             @endforeach
                         </x-slot:tbody>
                     </x-data-table>
+                    </div>
                 </div>
             </div>
         </div>

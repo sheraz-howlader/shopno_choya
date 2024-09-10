@@ -60,6 +60,8 @@ TODO::
     last 2 mas a kar kar pending ache __done
     user approve er option banate hobe
     user active na hole take ekta page a niye jete hobe(page a thake je keno se dhukte parteche na) __done
+    profile image size thik korte hobe
+    role management theke developer hide korte hobe
     member a search & filter lagbe
     deposit & adjustment a statement upload add korte hobe
     deposit & adjustment a datepicker add korte hobe
