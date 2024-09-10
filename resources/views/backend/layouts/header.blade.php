@@ -1,7 +1,7 @@
 <header class="pc-header">
     <div class="m-header">
         <a href="" class="b-brand text-primary">
-            <img src="{{ asset('logo.png') }}" alt="logo image" class="logo-lg" width="20%">
+            <img src="{{ asset('logo.png') }}" alt="logo image" class="logo-lg" width="70%">
             <span class="badge bg-white text-dark rounded-pill ms-2 theme-version">v{{ config('app.version') }}</span>
         </a>
     </div>

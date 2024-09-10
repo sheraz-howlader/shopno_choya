@@ -59,16 +59,16 @@
     </div>
 </div>
 
-<footer class="pc-footer">
-    <div class="footer-wrapper container-fluid">
-        <div class="row">
-            <div class="col-sm-6 my-1">
-                <p class="m-0"> SCSS &#9829; crafted by Team
-                    <a href="https://github.com/sherazHowlader" target="_blank"> Sheraz Howlader </a></p>
-            </div>
-        </div>
-    </div>
-</footer>
+{{--<footer class="pc-footer">--}}
+{{--    <div class="footer-wrapper container-fluid">--}}
+{{--        <div class="row">--}}
+{{--            <div class="col-sm-6 my-1">--}}
+{{--                <p class="m-0"> {{ config('app.name') }} &#9829; crafted by Team--}}
+{{--                    <a href="https://github.com/sherazHowlader" target="_blank"> Sheraz Howlader </a></p>--}}
+{{--            </div>--}}
+{{--        </div>--}}
+{{--    </div>--}}
+{{--</footer>--}}
 
 <script src="https://code.jquery.com/jquery-3.7.1.js"></script>
 <script src="{{ url('backend/js/plugins/popper.min.js') }}" type="6c705b80c5ee6d73b3f92550-text/javascript"></script>
