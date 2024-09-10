@@ -78,13 +78,14 @@
                                         <x-slot:thead>
                                             <tr>
                                                 <th class="text-center" width="3%"> S/L</th>
-                                                <th> Member Name</th>
-                                                <th> Amount</th>
-                                                <th> Payment Date</th>
-                                                <th class="text-center" width="5%"> Payment Status</th>
+                                                <th> Member Name </th>
+                                                <th> Amount </th>
+                                                <th class="text-center" width="10%"> Attached File </th>
+                                                <th> Payment Date </th>
+                                                <th class="text-center" width="5%"> Payment Status </th>
 
                                                 @canany(['deposit::edit', 'deposit::destroy'])
-                                                    <th class="text-center" width="12%"> Action</th>
+                                                    <th class="text-center" width="12%"> Action </th>
                                                 @endcanany
                                             </tr>
                                         </x-slot:thead>
@@ -93,8 +94,25 @@
                                             @forelse($deposits as $deposit)
                                                 <tr>
                                                     <td class="text-center"> {{ $loop->index + $deposits->firstItem() }} </td>
-                                                    <td> {{ $deposit->user->name }} </td>
+                                                    <td>
+                                                        {{ $deposit->user->name }}
+
+                                                        @if($deposit->user->role->slug === 'admin')
+                                                            <span class="badge bg-dark">Admin</span>
+                                                        @elseif($deposit->user->role->slug === 'cashier')
+                                                            <span class="badge bg-primary">Cashier</span>
+                                                        @endif
+                                                    </td>
                                                     <td> {{ $deposit->amount }} </td>
+                                                    <td class="text-center">
+                                                        @if(!is_null($deposit->statement_file))
+                                                            <a href="{{ asset($deposit->statement_file) }}" download>
+                                                                <i class="fas fa-paperclip"></i> File Attached
+                                                            </a>
+                                                        @else
+                                                            <span class="text-danger"> <i>No Attach file</i> </span>
+                                                        @endif
+                                                    </td>
                                                     <td> {{ $deposit->payment_at->format('d M Y') }} </td>
                                                     <td class="text-center"> {!! $deposit->display_status !!} </td>
 
@@ -165,8 +183,13 @@
                     <option value="{{ $user->id }}" @selected(auth()->id() === $user->id)> {{ $user->name }} </option>
                 @endforeach
             </select>
+
             <label for="" class="required">Amount</label>
             <input type="number" placeholder="amount" name="amount" class="form-control my-2">
+
+            <label for="">Statement </label>
+            <small class="text-info">(attach for prove your payment)</small>
+            <input type="file" placeholder="Statement" name="statement" class="form-control my-2">
 
             <label for="" class="required">Payment Date</label>
             <input type="date" name="payment_date" class="form-control my-2">
@@ -187,8 +210,13 @@
                     <option value="{{ $user->id }}"> {{ $user->name }} </option>
                 @endforeach
             </select>
+
             <label for="" class="required">Amount</label>
             <input type="number" placeholder="amount" name="amount" id="amount" class="form-control my-2">
+
+            <label for="">Statement</label>
+            <small class="text-info">(attach for prove your payment)</small>
+            <input type="file" placeholder="Statement" name="statement" class="form-control my-2">
 
             <label for="" class="required">Payment Date</label>
             <input type="date" name="payment_date" id="payment_date" class="form-control my-2">

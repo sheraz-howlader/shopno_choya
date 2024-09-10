@@ -33,6 +33,7 @@
                                                 <th class="text-center" width="3%"> S/L</th>
                                                 <th> Member Name </th>
                                                 <th> Amount </th>
+                                                <th class="text-center" width="10%"> Attached File </th>
                                                 <th> Adjustment Date </th>
                                                 <th> Remark </th>
                                                 <th class="text-center" width="12%"> Action </th>
@@ -45,6 +46,15 @@
                                                     <td class="text-center"> {{ $loop->index + $adjustments->firstItem() }} </td>
                                                     <td> {{ $adjustment->user->name }} </td>
                                                     <td> {{ $adjustment->amount }} </td>
+                                                    <td class="text-center">
+                                                        @if(!is_null($adjustment->statement_file))
+                                                            <a href="{{ asset($adjustment->statement_file) }}" download>
+                                                                <i class="fas fa-paperclip"></i> File Attached
+                                                            </a>
+                                                        @else
+                                                            <span class="text-danger"> <i>No Attach file</i> </span>
+                                                        @endif
+                                                    </td>
                                                     <td> {{ $adjustment->payment_at->format('d M Y') }} </td>
                                                     <td> {{ $adjustment->remark }} </td>
                                                     <td class="text-center">
@@ -101,6 +111,10 @@
             <label for="" class="required">Amount</label>
             <input type="number" placeholder="amount" name="amount" class="form-control my-2">
 
+            <label for="">Statement </label>
+            <small class="text-info">(attach for payment prove)</small>
+            <input type="file" placeholder="Statement" name="statement" class="form-control my-2">
+
             <label for="" class="required">Payment Date</label>
             <input type="date" name="payment_date" class="form-control my-2">
 
@@ -122,6 +136,10 @@
             </select>
             <label for="" class="required">Amount</label>
             <input type="number" placeholder="amount" name="amount" id="amount" class="form-control my-2">
+
+            <label for="">Statement </label>
+            <small class="text-info">(attach for payment prove)</small>
+            <input type="file" placeholder="Statement" name="statement" class="form-control my-2">
 
             <label for="" class="required">Payment Date</label>
             <input type="date" name="payment_date" id="payment_date" class="form-control my-2">

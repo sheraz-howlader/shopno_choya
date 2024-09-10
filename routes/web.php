@@ -9,6 +9,9 @@ use Illuminate\Support\Facades\Route;
 
 
 Route::group(['middleware' => ['auth:sanctum', 'verified', 'is_active']], function () {
+    Route::get('/dashboard', function (){
+        return redirect()->route('home');
+    });
     Route::get('/', [DashboardController::class, 'index'])->name('home');
     Route::get('analysis', [DashboardController::class, 'analysis'])->name('analysis');
 
@@ -17,9 +20,9 @@ Route::group(['middleware' => ['auth:sanctum', 'verified', 'is_active']], functi
 
     Route::resource('deposit', DepositController::class)->except('create', 'show');
     Route::resource('adjustment', AdjustmentController::class)->except('create', 'show');
+    Route::get('update/profile',[UserController::class, 'updateProfile'])->name('update.profile');
     Route::resource('users',UserController::class)->except('show', 'store', 'create');
     Route::resource('roles',RoleController::class)->except('show');
 });
-
 
 Route::get('inactive', [DashboardController::class, 'inactive'])->name('inactive.message');

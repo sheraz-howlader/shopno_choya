@@ -9,6 +9,39 @@
 
             <div class="card">
                 <div class="card-body">
+                    <form action="{{ route('users.index') }}" method="get">
+                        <div class="row justify-content-end mb-3">
+                            <div class="col-md-1 pe-0 mt-2">
+                                <select name="filter[status]" class="form-control form-control-sm">
+                                    <option disabled selected> Select status</option>
+                                    <option
+                                        value="1" @selected(isset($filters['status']) && $filters['status'] == 1)>
+                                        Active
+                                    </option>
+                                    <option
+                                        value="0" @selected(isset($filters['status']) && $filters['status'] == 0)>
+                                        Inactive
+                                    </option>
+                                </select>
+                            </div>
+                            <div class="col-md-3 mt-2">
+                                <div class="input-group input-group-sm">
+                                    <input type="text" name="search" class="form-control form-control-sm"
+                                           placeholder="name/email/phone" value="{{ isset($search) ? $search : '' }}">
+                                    <button class="btn btn-info btn-sm" type="submit"> Search</button>
+
+                                    @if (!empty($filters) || !empty($search))
+                                        <a class="btn btn-danger btn-sm" href="{{ route('users.index') }}"
+                                           role="button">
+                                            <i class="fas fa-sync-alt"></i>
+                                            Reset
+                                        </a>
+                                    @endif
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+
                 <div class="table-responsive">
                     <x-data-table>
                         <x-slot:thead>

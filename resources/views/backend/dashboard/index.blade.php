@@ -31,7 +31,15 @@
                                 @forelse($deposits as $deposit)
                                     <tr>
                                         <td class="text-center"> {{ $loop->iteration }} </td>
-                                        <td class="text-center"> {{ $deposit->user->name }} </td>
+                                        <td class="text-center">
+                                            {{ $deposit->user->name }}
+
+                                            @if($deposit->user->role->slug === 'admin')
+                                                <span class="badge bg-dark">Admin</span>
+                                            @elseif($deposit->user->role->slug === 'cashier')
+                                                <span class="badge bg-primary">Cashier</span>
+                                            @endif
+                                        </td>
                                         <td class="text-center"> {{ $deposit->deposit_amount }} </td>
                                         <td class="text-center"> {{ $deposit->total_due_amount }} </td>
                                         <td class="text-center"> {{ date('d F Y', strtotime($deposit->latest_payment)) }} </td>

@@ -5,12 +5,14 @@ namespace App\Http\Controllers;
 use App\Models\Adjustment;
 use App\Models\Deposit;
 use App\Models\User;
+use App\Services\FileHandlerService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Gate;
 use Symfony\Component\HttpFoundation\Response;
 
 class AdjustmentController extends Controller
 {
+    use FileHandlerService;
     public function index()
     {
         abort_if(Gate::none(['adjustment::list']), Response::HTTP_FORBIDDEN);
@@ -34,7 +36,7 @@ class AdjustmentController extends Controller
             ->when(isset($filters['date']), function ($query) use ($filters) {
                 $query->where('payment_at', $filters['date']);
             })
-            ->paginate()
+            ->paginate(10)
             ->withQueryString();
 
         return view('backend.adjustments.index', compact('users', 'adjustments', 'search', 'filters'));
@@ -61,11 +63,14 @@ class AdjustmentController extends Controller
             'payment_date.required' => 'Payment date is required.',
         ]);
 
+        $file = $this->handleFile($request->statement, 'backend/images/adjustments/', '');
+
         $deposit = Deposit::create([
             'user_id' => $request->user_id,
             'amount' => $request->amount,
             'payment_status' => 'confirm',
             'payment_at'     => $request->payment_date,
+            'statement_file' => $file,
             'remark' => $request->remark ?? null,
             'is_adjustment' => true,
         ]);
@@ -75,6 +80,7 @@ class AdjustmentController extends Controller
             'deposit_id' => $deposit->id,
             'amount' => $request->amount,
             'payment_at' => $request->payment_date,
+            'statement_file' => $file,
             'remark' => $request->remark ?? null,
         ]);
 
@@ -107,10 +113,13 @@ class AdjustmentController extends Controller
         $adjustment = Adjustment::findOrFail($id);
         $deposit = Deposit::findOrFail($adjustment->deposit_id);
 
+        $file = $this->handleFile($request->statement, 'backend/images/adjustments/', $adjustment->statement_file);
+
         $adjustment->update([
             'user_id' => $request->user_id,
             'amount' => $request->amount,
             'payment_at' => $request->payment_date,
+            'statement_file' => $file,
             'remark' => $request->remark ?? null,
         ]);
 
@@ -119,6 +128,7 @@ class AdjustmentController extends Controller
             'amount' => $request->amount,
             'payment_status' => 'confirm',
             'payment_at'     => $request->payment_date,
+            'statement_file' => $file,
             'remark' => $request->remark ?? null,
         ]);
 

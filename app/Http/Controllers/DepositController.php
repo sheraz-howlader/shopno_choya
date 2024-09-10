@@ -6,6 +6,7 @@ use App\Models\Deposit;
 use App\Models\User;
 use App\Services\Category\CategoryServices;
 use App\Services\DataTableFilterService;
+use App\Services\FileHandlerService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Gate;
 use Symfony\Component\HttpFoundation\Response;
@@ -14,6 +15,7 @@ class DepositController extends Controller
 {
     use CategoryServices;
     use DataTableFilterService;
+    use FileHandlerService;
 
     public function index()
     {
@@ -103,10 +105,13 @@ class DepositController extends Controller
             'payment_at.required' => 'Payment date is required.',
         ]);
 
+        $file = $this->handleFile($request->statement, 'backend/images/statements/', '');
+
         Deposit::create([
             'user_id' => $request->user_id,
             'amount' => $request->amount,
             'payment_at' => $request->payment_date,
+            'statement_file' => $file,
             'remark' => $request->remark ?? null,
         ]);
 
@@ -137,10 +142,13 @@ class DepositController extends Controller
 
         $deposit = Deposit::findOrFail($id);
 
+        $file = $this->handleFile($request->statement, 'backend/images/statements/', $deposit->statement_file);
+
         $deposit->update([
             'user_id' => $request->user_id,
             'amount' => $request->amount,
             'payment_at' => $request->payment_date,
+            'statement_file' => $file,
             'remark' => $request->remark ?? null,
         ]);
 

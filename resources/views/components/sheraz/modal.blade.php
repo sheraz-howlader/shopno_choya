@@ -1,6 +1,6 @@
 @props(['url' => '', 'id' => '', 'content' => '', 'title' => '', 'method' => '', 'formID' => '','animation' => ''])
 
-<form action="{{ $url }}" method="post" id="{{$formID}}">
+<form action="{{ $url }}" method="post" id="{{$formID}}" enctype="multipart/form-data">
     @csrf
     @if($method)
         @method($method)

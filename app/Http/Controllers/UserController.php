@@ -8,6 +8,7 @@ use App\Services\FileHandlerService;
 use App\Services\MailSender;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Gate;
+use Illuminate\Support\Facades\Hash;
 use Symfony\Component\HttpFoundation\Response;
 
 class UserController extends Controller
@@ -19,16 +20,26 @@ class UserController extends Controller
     {
         abort_if(Gate::none(['user::list']), Response::HTTP_FORBIDDEN);
 
-        $users = User::paginate(10);
-        return view('backend.users.index',compact('users'));
+        $search   = request()->get('search');
+        $filters  = request()->get('filter');
+
+        $users = User::query()
+            ->when(isset($search), function ($query) use ($search) {
+                $query->where('name', 'like', '%' . $search . '%')
+                    ->orwhere('email', 'like', '%' . $search . '%')
+                    ->orwhere('phone_no', 'like', '%' . $search . '%');
+            })
+            ->when(isset($filters['status']), function ($query) use ($filters) {
+                $query->where('status', $filters['status']);
+            })
+            ->paginate(10)->withQueryString();
+
+        return view('backend.users.index',compact('users', 'search', 'filters'));
     }
 
     public function create()
     {
-        abort_if(Gate::none(['user::create']), Response::HTTP_FORBIDDEN);
-
-        $roles = Role::all();
-        return view('backend.users.form',compact('roles'));
+        //
     }
 
     public function store(Request $request)
@@ -71,11 +82,11 @@ class UserController extends Controller
             'status'    => $request->status,
             'role_id'   => $request->role_id,
             'profile_photo_path'   => $image,
+            'password'   => $request->pass ? Hash::make($request->pass): $user->password,
         ]);
 
         return redirect()->route('users.index');
     }
-
 
     public function destroy(user $user)
     {
@@ -87,5 +98,10 @@ class UserController extends Controller
 
         $user->delete();
         return redirect()->route('users.index');
+    }
+
+    public function updateProfile()
+    {
+        return view('backend.users.update-profile');
     }
 }
