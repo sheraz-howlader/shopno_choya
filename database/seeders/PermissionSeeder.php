@@ -8,11 +8,6 @@ use Illuminate\Database\Seeder;
 
 class PermissionSeeder extends Seeder
 {
-    /**
-     * Run the database seeds.
-     *
-     * @return void
-     */
     public function run()
     {
         // Dashboard
@@ -84,7 +79,7 @@ class PermissionSeeder extends Seeder
             'action' => 'user::destroy',
         ]);
 
-        // Content Management
+        // Deposit Management
         $userModule = PermissionModule::updateOrCreate([
             'name' => "Deposit Management"
         ]);
@@ -111,6 +106,35 @@ class PermissionSeeder extends Seeder
             'module_id' => $userModule->id,
             'name' => 'Deposit Delete',
             'action' => 'deposit::destroy',
+        ]);
+
+        // Adjustment Management
+        $userModule = PermissionModule::updateOrCreate([
+            'name' => "Adjustment Management"
+        ]);
+
+        Permission::updateOrCreate([
+            'module_id' => $userModule->id,
+            'name' => 'Adjustment List',
+            'action' => 'adjustment::list',
+        ]);
+
+        Permission::updateOrCreate([
+            'module_id' => $userModule->id,
+            'name' => 'Adjustment Create',
+            'action' => 'adjustment::create',
+        ]);
+
+        Permission::updateOrCreate([
+            'module_id' => $userModule->id,
+            'name' => 'Adjustment Edit',
+            'action' => 'adjustment::edit',
+        ]);
+
+        Permission::updateOrCreate([
+            'module_id' => $userModule->id,
+            'name' => 'Adjustment Delete',
+            'action' => 'adjustment::destroy',
         ]);
     }
 }

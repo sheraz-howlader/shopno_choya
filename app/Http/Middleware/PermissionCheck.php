@@ -12,6 +12,13 @@ class PermissionCheck
 {
     public function handle(Request $request, Closure $next): Response
     {
+        // developer bypass all permission check
+        Gate::before(function ($user) {
+            if ($user->role_id == 1) {
+                return true;
+            }
+        });
+
         $permissions = Permission::all();
         foreach ($permissions as $permission) {
             Gate::define($permission->action, function ($user) use ($permission) {
