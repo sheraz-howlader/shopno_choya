@@ -24,7 +24,7 @@ class DashboardController extends Controller
             ->where('payment_status', 'confirm')
             ->groupBy('user_id')
             ->orderBy('latest_payment', 'asc')
-            ->get();
+            ->paginate(15)->withQueryString();
 
 
         $total_balance = 0;

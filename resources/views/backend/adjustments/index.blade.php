@@ -44,7 +44,12 @@
                                             @forelse($adjustments as $adjustment)
                                                 <tr>
                                                     <td class="text-center"> {{ $loop->index + $adjustments->firstItem() }} </td>
-                                                    <td> {{ $adjustment->user->name }} </td>
+                                                    <td>
+                                                        <img src="{{ asset($adjustment->user->thumbnail()) }}" alt="{{ $adjustment->user->name }}"
+                                                             class="img-thumbnail me-1" style="max-height: 40px; max-width: 50px">
+
+                                                        {{ $adjustment->user->name }}
+                                                    </td>
                                                     <td> {{ $adjustment->amount }} </td>
                                                     <td class="text-center">
                                                         @if(!is_null($adjustment->statement_file))
@@ -87,13 +92,11 @@
                         </div>
                     </div>
                 </div>
-
                 @if($adjustments->hasPages())
                     <div class="card-footer py-0">
                         {{ $adjustments->links() }}
                     </div>
                 @endif
-
             </div>
         </div>
     </div>

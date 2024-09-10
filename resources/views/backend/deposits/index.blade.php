@@ -95,6 +95,9 @@
                                                 <tr>
                                                     <td class="text-center"> {{ $loop->index + $deposits->firstItem() }} </td>
                                                     <td>
+                                                        <img src="{{ asset($deposit->user->thumbnail()) }}" alt="{{ $deposit->user->name }}"
+                                                             class="img-thumbnail me-1" style="max-height: 40px; max-width: 50px">
+
                                                         {{ $deposit->user->name }}
 
                                                         @if($deposit->user->role->slug === 'admin')
@@ -163,7 +166,6 @@
                         </div>
                     </div>
                 </div>
-
                 @if($deposits->hasPages())
                     <div class="card-footer py-0">
                         {{ $deposits->links() }}

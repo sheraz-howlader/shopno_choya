@@ -1,27 +1,3 @@
-User
-    role_id
-    phone_no
-
-Deposit
-    user_id
-    amount
-    statement_file
-    payment_status
-        pending
-        reject
-        confirm
-        draft
-
-    payment_at
-    remark
-
-Role
-    1. Developer
-    2. Admin
-    3. Cashier
-    4. Member
-
-========================
 1. kew deposit korle sobar kache mail jabe.
 2. approve korle depositor er kache mail jabe.
 3. deposit kore draft kore rakha jabe.
@@ -46,9 +22,9 @@ Kon din kothay ki khoroch hoiche setar hisab rakhar jonno ekta option thakbe.
 Notice board theke. Apps a dhukle notice dekha jabe + notice dile mail a pathiye dewa hobe.
 
 
-
-mdsherazhowlader@gmail.com
-Pa$$w0rd!
+auth info -
+    mdsherazhowlader@gmail.com
+    correct3!3
 
 
 ***adjustment korle adjustment + deposit a new data porbe
@@ -57,17 +33,12 @@ Pa$$w0rd!
     2024-06-05
 
 TODO::
-    last 2 mas a kar kar pending ache __done
     user approve er option banate hobe
-    user active na hole take ekta page a niye jete hobe(page a thake je keno se dhukte parteche na) __done
-    profile image size thik korte hobe __done
     role management theke developer hide korte hobe
-    member a search & filter lagbe  __done
-    deposit & adjustment a statement upload add korte hobe  __done
     deposit & adjustment a datepicker add korte hobe
 
 
-=====================================================
+=========================Laravel 11 Feature============================
 3rt party provider register -
     bootstrap/providers.php
         //array er vitore class file link koralei hobe

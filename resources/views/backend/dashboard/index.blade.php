@@ -18,8 +18,8 @@
                         <x-data-table >
                             <x-slot:thead>
                                 <tr>
-                                    <th class="text-center"> ক্রমিক নং </th>
-                                    <th class="text-center"> নাম </th>
+                                    <th class="text-center" width="3%"> ক্রমিক নং </th>
+                                    <th> নাম </th>
                                     <th class="text-center"> জমা </th>
                                     <th class="text-center"> বকেয়া </th>
                                     <th class="text-center"> শেষ জমার তারিখ </th>
@@ -31,7 +31,10 @@
                                 @forelse($deposits as $deposit)
                                     <tr>
                                         <td class="text-center"> {{ $loop->iteration }} </td>
-                                        <td class="text-center">
+                                        <td>
+                                            <img src="{{ asset($deposit->user->thumbnail()) }}" alt="{{ $deposit->user->name }}"
+                                                 class="img-thumbnail me-1" style="max-height: 40px; max-width: 50px">
+
                                             {{ $deposit->user->name }}
 
                                             @if($deposit->user->role->slug === 'admin')
@@ -54,6 +57,11 @@
                         </x-data-table>
                     </div>
                 </div>
+                @if($deposits->hasPages())
+                    <div class="card-footer py-0">
+                        {{ $deposits->links() }}
+                    </div>
+                @endif
             </div>
         </div>
     </div>
