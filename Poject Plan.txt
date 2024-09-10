@@ -76,3 +76,6 @@ Middleware register -
         $middleware->alias([
             'is_active' => App\Http\Middleware\IsActive::class,
         ]);
+
+app/Providers/AppServiceProvider.php
+    RedirectIfAuthenticated
