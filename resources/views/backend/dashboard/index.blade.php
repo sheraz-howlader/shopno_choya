@@ -39,7 +39,7 @@
                                     </tr>
                                 @empty
                                     <tr>
-                                        <td class="text-center"> No user name </td>
+                                        <td class="text-center" colspan="10"> No user name </td>
                                     </tr>
                                 @endforelse
                             </x-slot:tbody>

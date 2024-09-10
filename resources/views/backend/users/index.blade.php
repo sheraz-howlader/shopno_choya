@@ -9,6 +9,7 @@
 
             <div class="card">
                 <div class="card-body">
+                <div class="table-responsive">
                     <x-data-table>
                         <x-slot:thead>
                             <tr>
@@ -74,6 +75,7 @@
                         {{ $users->links() }}
                     </div>
                 @endif
+            </div>
             </div>
         </div>
     </div>

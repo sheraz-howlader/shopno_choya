@@ -24,7 +24,7 @@
                 <div class="card-body">
                     <form action="{{ route('deposit.index') }}" method="get">
                         <div class="row justify-content-end mb-3">
-                            <div class="col-md-2 pe-0">
+                            <div class="col-md-2 pe-0 mt-2">
                                 <div class="input-group input-group-sm flatpickr">
                                     <button class="btn btn-info btn-sm" type="button" data-toggle>
                                         <i class="fas fa-calendar-alt"></i>
@@ -39,7 +39,7 @@
                                     </button>
                                 </div>
                             </div>
-                            <div class="col-md-1 pe-0">
+                            <div class="col-md-1 pe-0 mt-2">
                                 <select name="filter[status]" class="form-control form-control-sm">
                                     <option disabled selected> Select status</option>
                                     <option
@@ -52,7 +52,7 @@
                                     </option>
                                 </select>
                             </div>
-                            <div class="col-md-3">
+                            <div class="col-md-3 mt-2">
                                 <div class="input-group input-group-sm">
                                     <input type="text" name="search" class="form-control form-control-sm"
                                            placeholder="name/email/phone" value="{{ isset($search) ? $search : '' }}">

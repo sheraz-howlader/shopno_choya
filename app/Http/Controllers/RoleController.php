@@ -57,8 +57,7 @@ class RoleController extends Controller
         abort_if(Gate::none(['role::edit']), Response::HTTP_FORBIDDEN);
 
         $role->permissions()->sync($request->permissions);
-        //return redirect()->route('roles.index')->with('success', 'Role permission sync successfully.');
-        return back();
+        return back()->with('success', 'Role permission sync successfully.');
     }
 
     public function destroy(Role $role)
