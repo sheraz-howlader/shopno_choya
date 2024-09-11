@@ -203,6 +203,12 @@
                 type: "get",
                 dataType: 'json',
                 url: route('adjustment.edit', id),
+                beforeSend() {
+                    swal.fire({
+                        title: 'Processing your request...',
+                    });
+                    swal.showLoading();
+                },
                 success: function (response) {
                     $('#user_id').val(response.adjustment.user_id);
                     $('#amount').val(response.adjustment.amount);
@@ -219,6 +225,7 @@
 
                     $('#adjustment_modal').attr('action', route('adjustment.update', id));
                     $('#editAdjustment').modal('show');
+                    swal.close();
                 }
             })
         }

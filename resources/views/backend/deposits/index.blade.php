@@ -237,6 +237,12 @@
                 type: "get",
                 dataType: 'json',
                 url: route('deposit.edit', id),
+                beforeSend() {
+                    swal.fire({
+                        title: 'Processing your request...',
+                    });
+                    swal.showLoading();
+                },
                 success: function (response) {
                     $('#user_id').val(response.deposit.user_id);
                     $('#amount').val(response.deposit.amount);
@@ -253,6 +259,7 @@
 
                     $('#deposit_modal').attr('action', route('deposit.update', id));
                     $('#editEntry').modal('show');
+                    swal.close();
                 }
             })
         }
@@ -269,8 +276,21 @@
                     type: "post",
                     url: route('deposit.approve', id),
                     dataType: "json",
-                    success: function () {
-                        window.location.reload();
+                    beforeSend() {
+                        swal.fire({
+                            title: 'Processing your request...',
+                        });
+                        swal.showLoading();
+                    },
+                    success: function (response) {
+                        swal.close();
+                        swal.fire({
+                            html: response.message,
+                            icon: response.status,
+                            confirmButtonText: 'OK'
+                        }).then(function() {
+                            location.reload();
+                        });
                     }
                 });
             }

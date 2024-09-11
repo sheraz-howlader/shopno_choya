@@ -115,6 +115,16 @@ class UserController extends Controller
             'status' => 1
         ]);
 
-        return response()->json(['status' => 200]);
+        $data = [
+            'subject'   => 'Your account has been activated',
+            'template'  => 'emails.user_approved',
+            'name'      => $user->name,
+            'approve_by'=> auth()->user()->name,
+            'mail_to'   => $user->email,
+        ];
+
+        $this->emailSend($data);
+
+        return response()->json(['status' => 'success', 'message' => 'Member has been approved successfully.']);
     }
 }

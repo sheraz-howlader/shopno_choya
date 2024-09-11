@@ -7,6 +7,7 @@ use App\Models\User;
 use App\Services\Category\CategoryServices;
 use App\Services\DataTableFilterService;
 use App\Services\FileHandlerService;
+use App\Services\MailSender;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Gate;
 use Symfony\Component\HttpFoundation\Response;
@@ -16,6 +17,7 @@ class DepositController extends Controller
     use CategoryServices;
     use DataTableFilterService;
     use FileHandlerService;
+    use MailSender;
 
     public function index()
     {
@@ -109,13 +111,26 @@ class DepositController extends Controller
 
         $file = $this->handleFile($request->statement, 'backend/images/statements/', '');
 
-        Deposit::create([
+        $deposit = Deposit::create([
             'user_id' => $request->user_id,
             'amount' => $request->amount,
             'payment_at' => $request->payment_date,
             'statement_file' => $file,
             'remark' => $request->remark ?? null,
         ]);
+
+        $cashier = User::where('role_id', 3)->first();
+
+        $data = [
+            'subject'   => $deposit->user->name . ' deposited money need approval',
+            'template'  => 'emails.need_approved',
+            'name'      => $deposit->user->name,
+            'amount'    => $deposit->amount,
+            'mail_to'   => $cashier->email,
+            'cashier_name'   => $cashier->name,
+        ];
+
+        $this->emailSend($data);
 
         return redirect()->route('deposit.index')->with('success', 'Deposit has been save successfully.');
     }
@@ -176,6 +191,19 @@ class DepositController extends Controller
             'payment_status' => 'confirm'
         ]);
 
-        return response()->json(['status' => 200]);
+        $data = [
+            'subject'   => 'Your deposit has been approved',
+            'template'  => 'emails.deposit_approved',
+            'name'      => $deposit->user->name,
+            'amount'    => $deposit->amount,
+            'payment_date'    => $deposit->payment_at->format('d M Y'),
+            'approve_date'    => now()->format('d M Y'),
+            'approve_by'      => auth()->user()->name,
+            'mail_to'         => $deposit->user->email,
+        ];
+
+        $this->emailSend($data);
+
+        return response()->json(['status' => 'success', 'message' => 'Deposit has been approved successfully.']);
     }
 }

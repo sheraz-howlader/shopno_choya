@@ -145,8 +145,21 @@
                     type: "post",
                     url: route('user.accept', id),
                     dataType: "json",
-                    success: function () {
-                        window.location.reload();
+                    beforeSend() {
+                        swal.fire({
+                            title: 'Processing your request...',
+                        });
+                        swal.showLoading();
+                    },
+                    success: function (response) {
+                        swal.close();
+                        swal.fire({
+                            html: response.message,
+                            icon: response.status,
+                            confirmButtonText: 'OK'
+                        }).then(function() {
+                            location.reload();
+                        });
                     }
                 });
             }
