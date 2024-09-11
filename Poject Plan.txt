@@ -1,44 +1,28 @@
-1. kew deposit korle sobar kache mail jabe.
-2. approve korle depositor er kache mail jabe.
-3. deposit kore draft kore rakha jabe.
+Deposit -
+    ekhane current month er hisab show korbe
+    kew deposit korle sobar kache mail jabe.
+    approve korle depositor er kache mail jabe.
 
-Role thakbe -
-    1. Admin
-    2. Cashier
-    3. Member
+Adjustment -
+    adjustment korle "adjustment + deposit" a new data porbe   ___done
 
-01. Admin sob kichu access korte parbe
-02. Cashier ke admin ja ja access korte dibe tai access korte parbe.
-    by default cashier deposit approve korte parbe.
+Analysis & Report -
+    Sob kichur hisab monthly/yearly/date wise filter kora jabe.
 
-03. Member only nijer tk joma dewa + joma dewa tk er somosto hisab dekhte parbe.
-    onner koto maser bokeya ache seta dekhte parbe.
-    somitir total amount + total due dekhte parbe.
+Expense -
+    Kon din kothay ki khoroch hoiche setar hisab rakhar jonno ekta option thakbe.
 
+Notice -
+    Notice board theke. Apps a dhukle notice dekha jabe + notice dile mail a pathiye dewa hobe.
 
-Sob kichur hisab monthly/yearly/date wise dekha jabe.
-
-Kon din kothay ki khoroch hoiche setar hisab rakhar jonno ekta option thakbe.
-Notice board theke. Apps a dhukle notice dekha jabe + notice dile mail a pathiye dewa hobe.
-
-
-auth info -
-    mdsherazhowlader@gmail.com
-    correct3!3
-
-
-***adjustment korle adjustment + deposit a new data porbe
-
- 2 ta 3 mas age confirm
-    2024-06-05
-
+=========================//============================
 TODO::
     user approve er option banate hobe
     role management theke developer hide korte hobe
-    deposit & adjustment a datepicker add korte hobe
+    deposit & adjustment a "datepicker" add korte hobe
 
 
-=========================Laravel 11 Feature============================
+=========================/Laravel 11 Feature/============================
 3rt party provider register -
     bootstrap/providers.php
         //array er vitore class file link koralei hobe
