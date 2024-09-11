@@ -1,5 +1,5 @@
 Deposit -
-    ekhane current month er hisab show korbe
+    ekhane current month er hisab show korbe   ___done
     kew deposit korle sobar kache mail jabe.
     approve korle depositor er kache mail jabe.
 
@@ -7,7 +7,7 @@ Adjustment -
     adjustment korle "adjustment + deposit" a new data porbe   ___done
 
 Analysis & Report -
-    Sob kichur hisab monthly/yearly/date wise filter kora jabe.
+    Sob kichur hisab monthly/yearly/date wise filter kora jabe. ___done
 
 Expense -
     Kon din kothay ki khoroch hoiche setar hisab rakhar jonno ekta option thakbe.
@@ -17,7 +17,7 @@ Notice -
 
 =========================//============================
 TODO::
-    user approve er option banate hobe
+    user approve er option banate hobe   ___done
     role management theke developer hide korte hobe
     deposit & adjustment a "datepicker" add korte hobe
 

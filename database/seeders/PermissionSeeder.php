@@ -79,6 +79,12 @@ class PermissionSeeder extends Seeder
             'action' => 'user::destroy',
         ]);
 
+        Permission::updateOrCreate([
+            'module_id' => $userModule->id,
+            'name' => 'Member Accept',
+            'action' => 'user::user-accept',
+        ]);
+
         // Deposit Management
         $userModule = PermissionModule::updateOrCreate([
             'name' => "Deposit Management"

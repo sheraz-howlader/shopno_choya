@@ -79,10 +79,19 @@
                                     @canany(['user::edit', 'user::destroy'])
                                         @if(auth()->user()->role_id == 1 || $user->role_id !== 1)
                                             <td class="text-center">
+                                                @canany(['user::user-accept'])
+                                                    @if(($user->status === 0))
+                                                        <button type="button" class="btn btn-info btn-sm" onclick="accept({{$user->id}})">
+                                                            <i class="fas fa-check-double"></i> Accept
+                                                        </button>
+                                                    @endif
+                                                @endcanany
+
                                                 <a href="{{ route('users.edit', $user->id) }}"
                                                    class="btn btn-primary btn-sm">
                                                     <i class="fas fa-edit"></i> Edit
                                                 </a>
+
                                                 <form action="{{ route('users.destroy', $user->id) }}" method="post"
                                                       class="d-inline">
                                                     @csrf
@@ -118,6 +127,31 @@
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
     <script>
+        $.ajaxSetup({
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            }
+        });
+
+        // accept user
+        async function accept(id) {
+            let confirmation = await swal.fire({
+                text: "Are you sure want to accept?",
+                showCancelButton: true,
+                icon: 'warning',
+            });
+            if (confirmation.isConfirmed) {
+                $.ajax({
+                    type: "post",
+                    url: route('user.accept', id),
+                    dataType: "json",
+                    success: function () {
+                        window.location.reload();
+                    }
+                });
+            }
+        }
+
         $(function () {
             $(".delete").on('click', async function (e) {
                 e.preventDefault();

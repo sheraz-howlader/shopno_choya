@@ -117,7 +117,20 @@
             <input type="file" placeholder="Statement" name="statement" class="form-control my-2">
 
             <label for="" class="required">Payment Date</label>
-            <input type="date" name="payment_date" class="form-control my-2">
+            {{--<input type="date" name="payment_date" class="form-control my-2">--}}
+
+            <div class="input-group  my-2 flatpickr">
+                <button class="btn btn-info" type="button" data-toggle>
+                    <i class="fas fa-calendar-alt"></i>
+                </button>
+
+                <input type="date" name="payment_date" class="form-control"
+                       placeholder="Payment Date" data-input>
+
+                <button class="btn btn-info" type="button" data-clear>
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
 
             <label for="">Remark</label>
             <input type="text" name="remark" placeholder="Write something important" class="form-control my-2">
@@ -143,7 +156,19 @@
             <input type="file" placeholder="Statement" name="statement" class="form-control my-2">
 
             <label for="" class="required">Payment Date</label>
-            <input type="date" name="payment_date" id="payment_date" class="form-control my-2">
+            {{--<input type="date" name="payment_date" id="payment_date" class="form-control my-2">--}}
+
+            <div class="input-group  my-2" id="payment_date">
+                <button class="btn btn-info" type="button" data-toggle>
+                    <i class="fas fa-calendar-alt"></i>
+                </button>
+
+                <input type="text" name="payment_date" class="form-control"  data-input>
+
+                <button class="btn btn-info" type="button" data-clear>
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
 
             <label for="">Remark</label>
             <input type="text" name="remark" id="remark" placeholder="Write something important" class="form-control my-2">
@@ -179,13 +204,18 @@
                 dataType: 'json',
                 url: route('adjustment.edit', id),
                 success: function (response) {
-                    const date = new Date(response.adjustment.payment_at);
-                    const format_date = date.toISOString().split('T')[0];
-
                     $('#user_id').val(response.adjustment.user_id);
                     $('#amount').val(response.adjustment.amount);
-                    $('#payment_date').val(format_date);
                     $('#remark').val(response.adjustment.remark);
+
+                    $('#payment_date').flatpickr({
+                        altInput: true,
+                        dateFormat: "Y-m-d",
+                        enableTime: false,
+                        altFormat: "d F Y",
+                        wrap: true,
+                        defaultDate: response.adjustment.payment_at
+                    });
 
                     $('#adjustment_modal').attr('action', route('adjustment.update', id));
                     $('#editAdjustment').modal('show');

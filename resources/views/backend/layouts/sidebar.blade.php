@@ -54,6 +54,24 @@
                     </a>
                 </li>
 
+                <li class="pc-item">
+                    <a href="#" class="pc-link">
+                        <span class="pc-micon">
+                            <i class="fas fa-wallet"></i>
+                        </span>
+                        <span class="pc-mtext"> Expense </span>
+                    </a>
+                </li>
+
+                <li class="pc-item">
+                    <a href="#" class="pc-link">
+                        <span class="pc-micon">
+                            <i class="fas fa-scroll"></i>
+                        </span>
+                        <span class="pc-mtext"> Notice </span>
+                    </a>
+                </li>
+
                 <li class="pc-item {{ Route::is('users.*') ? 'active' : '' }}">
                     <a href="{{ route('users.index') }}" class="pc-link">
                         <span class="pc-micon">

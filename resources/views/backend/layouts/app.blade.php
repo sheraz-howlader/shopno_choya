@@ -55,11 +55,11 @@
 
 <div id="loading"></div>
 
-{{--<div class="loader-bg">--}}
-{{--    <div class="loader-track">--}}
-{{--        <div class="loader-fill"></div>--}}
-{{--    </div>--}}
-{{--</div>--}}
+<div class="loader-bg">
+    <div class="loader-track">
+        <div class="loader-fill"></div>
+    </div>
+</div>
 
 @include('backend.layouts.sidebar')
 

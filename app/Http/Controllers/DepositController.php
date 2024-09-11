@@ -41,6 +41,7 @@ class DepositController extends Controller
                 $query->where('payment_at', $filters['date']);
             })
             ->whereMonth('payment_at', now()->month)
+            ->orderBy('payment_at', 'desc')
             ->paginate(20)
             ->withQueryString();
 
@@ -175,6 +176,6 @@ class DepositController extends Controller
             'payment_status' => 'confirm'
         ]);
 
-        return response()->json(['deposit' => $deposit]);
+        return response()->json(['status' => 200]);
     }
 }

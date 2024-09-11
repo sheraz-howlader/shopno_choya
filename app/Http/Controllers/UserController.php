@@ -104,4 +104,17 @@ class UserController extends Controller
     {
         return view('backend.users.update-profile');
     }
+
+    public function acceptUser($id)
+    {
+        abort_if(!request()->ajax(), Response::HTTP_FORBIDDEN);
+        abort_if(Gate::none(['user::user-accept']), Response::HTTP_FORBIDDEN);
+
+        $user = User::findOrFail($id);
+        $user->update([
+            'status' => 1
+        ]);
+
+        return response()->json(['status' => 200]);
+    }
 }
