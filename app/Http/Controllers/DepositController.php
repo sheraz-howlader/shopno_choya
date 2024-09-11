@@ -40,7 +40,8 @@ class DepositController extends Controller
             ->when(isset($filters['date']), function ($query) use ($filters) {
                 $query->where('payment_at', $filters['date']);
             })
-            ->paginate(5)
+            ->whereMonth('payment_at', now()->month)
+            ->paginate(20)
             ->withQueryString();
 
         return view('backend.deposits.index', compact('users', 'deposits', 'search', 'filters'));

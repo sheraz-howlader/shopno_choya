@@ -8,7 +8,9 @@
     <div class="row">
         <div class="col-sm-12">
             <div class="page-header-title border-bottom pb-2 mb-4 d-flex align-items-center justify-content-between">
-                <h4 class="mb-0"> Deposit List </h4>
+                <h4 class="">
+                    Deposit List - <small> {{now()->format('F')}} </small>
+                </h4>
                 @canany(['deposit::create'])
                     <a href="" class="btn btn-primary btn-sm" data-pc-animate="fall" data-bs-toggle="modal"
                        data-bs-target="#addEntry">
@@ -22,54 +24,6 @@
 
             <div class="card">
                 <div class="card-body">
-                    <form action="{{ route('deposit.index') }}" method="get">
-                        <div class="row justify-content-end mb-3">
-                            <div class="col-md-2 pe-0 mt-2">
-                                <div class="input-group input-group-sm flatpickr">
-                                    <button class="btn btn-info btn-sm" type="button" data-toggle>
-                                        <i class="fas fa-calendar-alt"></i>
-                                    </button>
-
-                                    <input type="date" name="filter[date]" class="form-control form-control-sm"
-                                           placeholder="Payment Date"
-                                           value="{{ isset($filters['date']) ? $filters['date'] : '' }}" data-input>
-
-                                    <button class="btn btn-info btn-sm" type="button" data-clear>
-                                        <i class="fas fa-times"></i>
-                                    </button>
-                                </div>
-                            </div>
-                            <div class="col-md-1 pe-0 mt-2">
-                                <select name="filter[status]" class="form-control form-control-sm">
-                                    <option disabled selected> Select status</option>
-                                    <option
-                                        value="confirm" @selected(isset($filters['status']) && $filters['status'] == 'confirm')>
-                                        Confirm
-                                    </option>
-                                    <option
-                                        value="pending" @selected(isset($filters['status']) && $filters['status'] == 'pending')>
-                                        Pending
-                                    </option>
-                                </select>
-                            </div>
-                            <div class="col-md-3 mt-2">
-                                <div class="input-group input-group-sm">
-                                    <input type="text" name="search" class="form-control form-control-sm"
-                                           placeholder="name/email/phone" value="{{ isset($search) ? $search : '' }}">
-                                    <button class="btn btn-info btn-sm" type="submit"> Search</button>
-
-                                    @if (!empty($filters) || !empty($search))
-                                        <a class="btn btn-danger btn-sm" href="{{ route('deposit.index') }}"
-                                           role="button">
-                                            <i class="fas fa-sync-alt"></i>
-                                            Reset
-                                        </a>
-                                    @endif
-                                </div>
-                            </div>
-                        </div>
-                    </form>
-
                     <div class="dt-responsive">
                         <div id="dom-jqry_wrapper" class="dt-container dt-bootstrap5">
                             <div class="row mt-2 justify-content-md-center">
@@ -108,7 +62,7 @@
                                                     </td>
                                                     <td> {{ $deposit->amount }} </td>
                                                     <td class="text-center">
-                                                        @if(!is_null($deposit->statement_file))
+                                                        @if($deposit->statement_file)
                                                             <a href="{{ asset($deposit->statement_file) }}" download>
                                                                 <i class="fas fa-paperclip"></i> File Attached
                                                             </a>

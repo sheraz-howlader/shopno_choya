@@ -36,18 +36,30 @@
             content: '*';
             color: red;
         }
+
+        #loading{
+            position: fixed;
+            width: 100%;
+            height: 100vh;
+            background: #fff
+            url({{ asset('preloader.gif') }})
+            no-repeat center center;
+            z-index: 99999;
+        }
     </style>
 </head>
 
 
 <body data-pc-header="header-1" data-pc-preset="preset-1" data-pc-sidebar-theme="light" data-pc-sidebar-caption="true"
-      data-pc-direction="ltr" data-pc-theme="light">
+      data-pc-direction="ltr" data-pc-theme="light" onload="myFunction()">
 
-<div class="loader-bg">
-    <div class="loader-track">
-        <div class="loader-fill"></div>
-    </div>
-</div>
+<div id="loading"></div>
+
+{{--<div class="loader-bg">--}}
+{{--    <div class="loader-track">--}}
+{{--        <div class="loader-fill"></div>--}}
+{{--    </div>--}}
+{{--</div>--}}
 
 @include('backend.layouts.sidebar')
 
@@ -82,6 +94,14 @@
 
 <script src="{{ ('backend/js/plugins/apexcharts.min.js ') }}" type="6c705b80c5ee6d73b3f92550-text/javascript"></script>
 <script src="https://cdn.jsdelivr.net/npm/phosphor-icons@1.4.2/src/index.min.js"></script>
+
+
+<script>
+    let preloader = document.getElementById("loading");
+    function myFunction(){
+        preloader.style.display = 'none';
+    }
+</script>
 
 @stack('scripts')
 @include('sweetalert::alert')

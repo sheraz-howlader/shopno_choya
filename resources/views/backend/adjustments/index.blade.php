@@ -35,7 +35,6 @@
                                                 <th> Amount </th>
                                                 <th class="text-center" width="10%"> Attached File </th>
                                                 <th> Adjustment Date </th>
-                                                <th> Remark </th>
                                                 <th class="text-center" width="12%"> Action </th>
                                             </tr>
                                         </x-slot:thead>
@@ -52,7 +51,7 @@
                                                     </td>
                                                     <td> {{ $adjustment->amount }} </td>
                                                     <td class="text-center">
-                                                        @if(!is_null($adjustment->statement_file))
+                                                        @if($adjustment->statement_file)
                                                             <a href="{{ asset($adjustment->statement_file) }}" download>
                                                                 <i class="fas fa-paperclip"></i> File Attached
                                                             </a>
@@ -61,7 +60,6 @@
                                                         @endif
                                                     </td>
                                                     <td> {{ $adjustment->payment_at->format('d M Y') }} </td>
-                                                    <td> {{ $adjustment->remark }} </td>
                                                     <td class="text-center">
                                                         @canany(['adjustment::edit'])
                                                             <button type="button" class="btn btn-primary btn-sm" onclick="editAdjustment({{$adjustment->id}})">

@@ -39,8 +39,37 @@ class DashboardController extends Controller
 
     public function analysis()
     {
-        $users = User::get();
-        return view('backend.dashboard.analysis', compact('users'));
+        $search   = request()->get('search');
+        $filters  = request()->get('filter');
+
+        $deposits = Deposit::query()
+            ->when(isset($search), function ($query) use ($search) {
+                $query->whereHas('user', function ($query) use ($search) {
+                    $query->where('name', 'like', '%' . $search . '%')
+                        ->orwhere('email', 'like', '%' . $search . '%')
+                        ->orwhere('phone_no', 'like', '%' . $search . '%');
+                });
+            })
+            ->when(isset($filters['status']), function ($query) use ($filters) {
+                $query->where('payment_status', $filters['status']);
+            })
+            ->when(isset($filters['date']), function ($query) use ($filters) {
+                //$query->where('payment_at', $filters['date']);
+
+                $dates = explode(' to ', $filters['date']);
+
+                if (count($dates) == 1) {
+                    $query->whereDate('payment_at', $dates[0]);
+                } else {
+                    $query->whereDate('payment_at', '>=', $dates[0]);
+                    $query->whereDate('payment_at', '<=', $dates[1]);
+                }
+            })
+            ->orderBy('payment_at', 'asc')
+            ->paginate(20)
+            ->withQueryString();
+
+        return view('backend.dashboard.analysis', compact('deposits', 'search', 'filters'));
     }
 
     public function inactive()
