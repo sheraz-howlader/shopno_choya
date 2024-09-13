@@ -64,7 +64,7 @@ class UserController extends Controller
 
     public function update(Request $request, user $user)
     {
-        abort_if(Gate::none(['user::edit']), Response::HTTP_FORBIDDEN);
+        abort_if(Gate::none(['user::update']), Response::HTTP_FORBIDDEN);
 
         $request->validate([
             'name'      => 'required|string',

@@ -81,6 +81,12 @@ class PermissionSeeder extends Seeder
 
         Permission::updateOrCreate([
             'module_id' => $userModule->id,
+            'name' => 'Profile Update',
+            'action' => 'user::update',
+        ]);
+
+        Permission::updateOrCreate([
+            'module_id' => $userModule->id,
             'name' => 'Member Accept',
             'action' => 'user::user-accept',
         ]);
