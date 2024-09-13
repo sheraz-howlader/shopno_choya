@@ -23,7 +23,7 @@ class PermissionCheck
 
         foreach ($permissions as $permission) {
             Gate::define($permission->action, function ($user) use ($permission) {
-                return $user->role->permissions()->pluck('action')->contains($permission->action);
+                return $user->role->permissions->pluck('action')->contains($permission->action);
             });
         }
 
