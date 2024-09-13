@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\Models\Deposit;
-use App\Models\User;
 use Illuminate\Support\Facades\Gate;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -13,7 +12,7 @@ class DashboardController extends Controller
     {
         abort_if( Gate::none( ['dashboard'] ), Response::HTTP_FORBIDDEN );
 
-        $deposits = Deposit::with('user')
+        $deposits = Deposit::with('user', 'user.role')
             ->select('user_id')
             ->selectRaw('MAX(payment_at) as latest_payment')
             ->selectRaw('MIN(payment_at) as earliest_payment')
@@ -42,7 +41,7 @@ class DashboardController extends Controller
         $search   = request()->get('search');
         $filters  = request()->get('filter');
 
-        $deposits = Deposit::query()
+        $deposits = Deposit::query()->with('user', 'user.role')
             ->when(isset($search), function ($query) use ($search) {
                 $query->whereHas('user', function ($query) use ($search) {
                     $query->where('name', 'like', '%' . $search . '%')

@@ -57,7 +57,8 @@
                                                     <input type="checkbox" name="permissions[]"
                                                            class="module_{{ $key }} permission"
                                                            value="{{ $permission->id }}" id="{{ $permission->id }}"
-                                                        {{ $role->permissions()->pluck('id')->contains($permission->id) ? 'checked': '' }}>
+                                                           @checked($role->permissions->pluck('id')->contains($permission->id))
+                                                    >
                                                     <label for="{{ $permission->id }}">{{ $permission->name }}</label>
                                                 </div>
                                             </div>

@@ -3,8 +3,9 @@
 namespace App\Providers;
 
 use Illuminate\Auth\Middleware\RedirectIfAuthenticated;
-use Illuminate\Support\ServiceProvider;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Pagination\Paginator;
+use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -21,10 +22,16 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        Paginator::defaultView('pagination::bootstrap-5');
+        Paginator::useBootstrapFive();
 
         RedirectIfAuthenticated::redirectUsing(function () {
             return route('home');
         });
+
+
+        //Model::preventLazyLoading();
+        //Model::preventSilentlyDiscardingAttributes();
+        //Model::preventAccessingMissingAttributes();
+        Model::shouldBeStrict();
     }
 }
