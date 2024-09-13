@@ -48,7 +48,7 @@ class RoleController extends Controller
     {
         abort_if(Gate::none(['role::edit']), Response::HTTP_FORBIDDEN);
 
-        $modules = PermissionModule::all();
+        $modules = PermissionModule::with('permissions')->get();
         return view('backend.roles.edit', compact('role', 'modules'));
     }
 

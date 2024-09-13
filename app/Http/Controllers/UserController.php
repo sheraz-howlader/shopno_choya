@@ -23,7 +23,7 @@ class UserController extends Controller
         $search   = request()->get('search');
         $filters  = request()->get('filter');
 
-        $users = User::query()
+        $users = User::query()->with('role')
             ->when(isset($search), function ($query) use ($search) {
                 $query->where('name', 'like', '%' . $search . '%')
                     ->orwhere('email', 'like', '%' . $search . '%')

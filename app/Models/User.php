@@ -76,11 +76,6 @@ class User extends Authenticatable
         return $this->belongsTo(Role::class);
     }
 
-    public function deposits(): hasMany
-    {
-        return $this->hasMany(Deposit::class);
-    }
-
     public function getDisplayStatusAttribute(): string
     {
         $status = $this->status;

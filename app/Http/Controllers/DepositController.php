@@ -28,7 +28,7 @@ class DepositController extends Controller
 
         $users = User::where('status', 1)->get();
 
-        $deposits = Deposit::query()
+        $deposits = Deposit::query()->with('user', 'user.role')
             ->when(isset($search), function ($query) use ($search) {
                 $query->whereHas('user', function ($query) use ($search) {
                     $query->where('name', 'like', '%' . $search . '%')
