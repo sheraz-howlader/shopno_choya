@@ -22,7 +22,7 @@ class AdjustmentController extends Controller
 
         $users = User::where('status', 1)->get();
 
-        $adjustments = Adjustment::query()
+        $adjustments = Adjustment::query()->with('user')
             ->when(isset($search), function ($query) use ($search) {
                 $query->whereHas('user', function ($query) use ($search) {
                     $query->where('name', 'like', '%' . $search . '%')

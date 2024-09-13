@@ -32,7 +32,9 @@ class UserController extends Controller
             ->when(isset($filters['status']), function ($query) use ($filters) {
                 $query->where('status', $filters['status']);
             })
-            ->paginate(10)->withQueryString();
+            ->orderBy('name')
+            ->paginate(10)
+            ->withQueryString();
 
         return view('backend.users.index',compact('users', 'search', 'filters'));
     }

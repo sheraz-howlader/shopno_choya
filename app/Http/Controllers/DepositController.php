@@ -42,7 +42,7 @@ class DepositController extends Controller
             ->when(isset($filters['date']), function ($query) use ($filters) {
                 $query->where('payment_at', $filters['date']);
             })
-            ->whereMonth('payment_at', now()->month)
+            //->whereMonth('payment_at', now()->month)
             ->orderBy('payment_at', 'desc')
             ->paginate(20)
             ->withQueryString();

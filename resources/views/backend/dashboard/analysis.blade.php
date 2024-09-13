@@ -94,7 +94,7 @@
                                                     </td>
                                                     <td class="text-center"> {{ $deposit->amount }} </td>
                                                     <td class="text-center">
-                                                        @if(!is_null($deposit->statement_file))
+                                                        @if($deposit->statement_file)
                                                             <a href="{{ asset($deposit->statement_file) }}" download>
                                                                 <i class="fas fa-paperclip"></i> File Attached
                                                             </a>
