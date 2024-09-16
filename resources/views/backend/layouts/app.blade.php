@@ -47,6 +47,8 @@
             z-index: 99999;
         }
     </style>
+
+    @livewireStyles
 </head>
 
 
@@ -83,16 +85,13 @@
 {{--</footer>--}}
 
 <script src="https://code.jquery.com/jquery-3.7.1.js"></script>
-<script src="{{ url('backend/js/plugins/popper.min.js') }}" type="6c705b80c5ee6d73b3f92550-text/javascript"></script>
-<script src="{{ url('backend/js/plugins/simplebar.min.js') }}" type="6c705b80c5ee6d73b3f92550-text/javascript"></script>
-<script src="{{ url('backend/js/plugins/bootstrap.min.js') }}" type="6c705b80c5ee6d73b3f92550-text/javascript"></script>
-<script src="{{ url('backend/js/fonts/custom-font.js') }}" type="6c705b80c5ee6d73b3f92550-text/javascript"></script>
-<script src="{{ url('backend/js/pcoded.js') }}" type="6c705b80c5ee6d73b3f92550-text/javascript"></script>
-<script src="{{ url('backend/js/plugins/feather.min.js') }}" type="6c705b80c5ee6d73b3f92550-text/javascript"></script>
-<script src="{{ url('backend/js/rocket-loader.min.js') }}" data-cf-settings="6c705b80c5ee6d73b3f92550-|49"
-        defer></script>
+<script src="{{ url('backend/js/plugins/popper.min.js') }}"></script>
+<script src="{{ url('backend/js/plugins/simplebar.min.js') }}"></script>
+<script src="{{ url('backend/js/plugins/bootstrap.min.js') }}"></script>
+<script src="{{ url('backend/js/fonts/custom-font.js') }}"></script>
+<script src="{{ url('backend/js/pcoded.js') }}"></script>
+<script src="{{ url('backend/js/plugins/feather.min.js') }}"></script>
 
-<script src="{{ ('backend/js/plugins/apexcharts.min.js ') }}" type="6c705b80c5ee6d73b3f92550-text/javascript"></script>
 <script src="https://cdn.jsdelivr.net/npm/phosphor-icons@1.4.2/src/index.min.js"></script>
 
 
@@ -103,6 +102,7 @@
     }
 </script>
 
+@livewireScripts
 @stack('scripts')
 @include('sweetalert::alert')
 @routes

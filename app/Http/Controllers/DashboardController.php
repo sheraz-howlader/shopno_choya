@@ -68,7 +68,8 @@ class DashboardController extends Controller
             ->paginate(20)
             ->withQueryString();
 
-        return view('backend.dashboard.analysis', compact('deposits', 'search', 'filters'));
+        //return view('backend.dashboard.analysis', compact('deposits', 'search', 'filters'));
+        return view('backend.dashboard.analysis');
     }
 
     public function inactive()
