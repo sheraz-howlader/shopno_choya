@@ -9,3 +9,7 @@
     <livewire:deposit-crud :users="$users"></livewire:deposit-crud>
 
 @endsection
+
+@push('scripts')
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+@endpush

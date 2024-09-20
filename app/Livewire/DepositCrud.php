@@ -3,6 +3,7 @@
 namespace App\Livewire;
 
 use App\Models\Deposit;
+use Illuminate\Validation\ValidationException;
 use Livewire\Component;
 use Livewire\WithPagination;
 
@@ -42,19 +43,27 @@ class DepositCrud extends Component
 
     public function store()
     {
-        $this->validate();
+        try {
+            $this->validate();
 
-        Deposit::create([
-            'user_id'   => $this->user_id,
-            'amount'    => $this->amount,
-            'payment_at'=> $this->payment_date,
-            'remark'    => $this->remark,
-        ]);
+            Deposit::create([
+                'user_id'   => $this->user_id,
+                'amount'    => $this->amount,
+                'payment_at'=> $this->payment_date,
+                'remark'    => $this->remark,
+            ]);
 
-        // Emit event to close the modal
-        $this->dispatch('closeModal');
-        session()->flash('success', 'Deposit created successfully.');
-        $this->resetInputFields();
+            // Emit event to close the modal
+            $this->dispatch('closeAddModal');
+            $this->resetInputFields();
+
+            session()->flash('success', 'Deposit created successfully.');
+
+        } catch (ValidationException $e) {
+            // Emit event to close the modal
+            $this->dispatch('closeAddModal');
+            $this->validate();
+        }
     }
 
     public function edit($id)
@@ -64,13 +73,19 @@ class DepositCrud extends Component
         $this->depositId    = $deposit->id;
         $this->user_id      = $deposit->user_id;
         $this->amount       = $deposit->amount;
-        $this->payment_date = $deposit->payment_at;
+        // $this->payment_date = $deposit->payment_at;
+        $this->payment_date = $deposit->payment_at->format('Y-m-d');
         $this->remark       = $deposit->remark;
-        $this->updateMode   = true;
 
         // Emit event to open the modal
-        $this->dispatch('openModal');
+        $this->dispatch('openEditModal');
     }
+
+//    public function payment_date()
+//    {
+//        $this->payment_date = 100;
+//    }
+
 
     public function update()
     {
@@ -86,10 +101,10 @@ class DepositCrud extends Component
         ]);
 
         // Emit event to close the modal
-        $this->dispatch('closeModal');
-        session()->flash('success', 'Deposit updated successfully.');
+        $this->dispatch('closeEditModal');
         $this->resetInputFields();
-        $this->updateMode = false;
+
+        session()->flash('success', 'Deposit updated successfully.');
     }
 
     public function delete($id)

@@ -13,6 +13,9 @@ TODO::Livewire
     store   ___done
     validation   ___done
     update by modal   ___done
+    date show on update   ___done
+    file uploading
+    datepickr   ___done
 
 
 

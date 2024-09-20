@@ -5,11 +5,10 @@
                 Deposit List - <small> {{now()->format('F')}} </small>
             </h4>
             @canany(['deposit::create'])
-                <a href="" class="btn btn-primary btn-sm" data-pc-animate="fall" data-bs-toggle="modal"
-                   data-bs-target="#addEntry">
+                <button href="" class="btn btn-primary btn-sm" data-pc-animate="fall" id="openModalBtn">
                     <i class="fas fa-plus-circle me-1"></i>
                     New Entry
-                </a>
+                </button>
             @endcanany
         </div>
 
@@ -134,15 +133,15 @@
 
                         <label for="" class="required">Payment Date</label>
 
-                        <div class="input-group  my-2 flatpickr">
+                        <div class="input-group">
                             <button class="btn btn-info" type="button" data-toggle>
                                 <i class="fas fa-calendar-alt"></i>
                             </button>
 
-                            <input type="date" name="payment_date" class="form-control" wire:model="payment_date"
-                                   placeholder="Payment Date" data-input>
+                            <input type="text" class="form-control flatpickr" readonly="readonly"
+                                   placeholder="Payment Date" wire:model="payment_date" data-input>
 
-                            <button class="btn btn-info" type="button" data-clear>
+                            <button class="btn btn-info" type="button" id="clear-date">
                                 <i class="fas fa-times"></i>
                             </button>
                         </div>
@@ -168,7 +167,7 @@
             <div class="modal-dialog">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title"> Add Deposit </h5>
+                        <h5 class="modal-title"> Update Deposit </h5>
                         <button type="button" class="btn-close btn-sm" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
@@ -185,18 +184,20 @@
 
                         <label for="" class="required">Payment Date</label>
 
-                        <div class="input-group  my-2 flatpickr">
+                        <div class="input-group my-2">
                             <button class="btn btn-info" type="button" data-toggle>
                                 <i class="fas fa-calendar-alt"></i>
                             </button>
 
-                            <input type="date" name="payment_date" class="form-control" wire:model="payment_date"
-                                   placeholder="Payment Date" data-input>
+                            <input type="text" class="form-control flatpickr" readonly="readonly"
+                                   placeholder="Payment Date" wire:model="payment_date" data-input>
 
-                            <button class="btn btn-info" type="button" data-clear>
+                            <button class="btn btn-info" type="button" id="clear-date">
                                 <i class="fas fa-times"></i>
                             </button>
                         </div>
+
+                        <input type="hidden" class="sheraz" name="sheraz" value="{{ $payment_date }}">
 
                         <label for="">Remark</label>
                         <input type="text" name="remark" placeholder="Write something important" class="form-control my-2" wire:model="remark">
@@ -218,21 +219,69 @@
     <script>
         // Make sure the DOM is fully loaded before running this script
         document.addEventListener('DOMContentLoaded', function () {
-            // Listen for the custom close button
-            const closeModalBtn = document.getElementById('closeModalBtn');
-            if (closeModalBtn) {
-                closeModalBtn.addEventListener('click', function () {
-                    let modal = bootstrap.Modal.getInstance(document.getElementById('editEntry'));
-                    modal.hide();
-                });
-            }
-
-            window.addEventListener('openModal', event => {
-                let modal = new bootstrap.Modal(document.getElementById('editEntry'));
+            //addEntry
+            const openModalBtn = document.getElementById('openModalBtn');
+            openModalBtn.addEventListener('click', function () {
+                let modal = new bootstrap.Modal(document.getElementById('addEntry'));
                 modal.show();
+
+                // Get all elements with class .flatpickr
+                const flatpickrInstances = document.querySelectorAll('.flatpickr');
+                flatpickrInstances.forEach((element) => {
+                    // Apply Flatpickr to each element
+                    const instance = flatpickr(element, {
+                        dateFormat: "Y-m-d",
+                        enableTime: false,
+                    });
+
+                    // Clear date functionality
+                    document.getElementById('clear-date').addEventListener('click', function () {
+                        instance.clear() // Clear the date for this instance
+                            @this.set('payment_date', null); // Reset the Livewire model
+                    });
+                });
             });
 
-            window.addEventListener('closeModal', event => {
+            //close after store or validation
+            window.addEventListener('closeAddModal', event => {
+                let modal = bootstrap.Modal.getInstance(document.getElementById('addEntry'));
+                modal.hide();
+            });
+
+
+
+            //edit modal show
+            window.addEventListener('openEditModal', event => {
+                let modal = new bootstrap.Modal(document.getElementById('editEntry'));
+                modal.show();
+
+                // Get all elements with class .flatpickr
+                const flatpickrInstances = document.querySelectorAll('.flatpickr');
+                flatpickrInstances.forEach((element) => {
+                    // Apply Flatpickr to each element
+                    const instance = flatpickr(element, {
+                        dateFormat: "Y-m-d",
+                        enableTime: false,
+                        defaultDate: @this.payment_date,
+                    });
+
+                    // Clear date functionality
+                    document.getElementById('clear-date').addEventListener('click', function () {
+                        instance.clear() // Clear the date for this instance
+                            @this.set('payment_date', null); // Reset the Livewire model
+                    });
+                });
+            });
+
+            //close by button
+            const closeModalBtn = document.getElementById('closeModalBtn');
+            closeModalBtn.addEventListener('click', function () {
+                let modal = bootstrap.Modal.getInstance(document.getElementById('editEntry'));
+                modal.hide();
+            });
+
+            //close after update or validation
+            window.addEventListener('closeEditModal', event => {
                 let modal = bootstrap.Modal.getInstance(document.getElementById('editEntry'));
                 modal.hide();
             });
