@@ -30,4 +30,14 @@ trait FileHandlerService
             unlink(public_path($existingFile));
         }
     }
+
+    public function uploadViaDisk($file, $path, $existingFile, $disk = 'public')
+    {
+        if ($file){
+            $this->removeFile($existingFile);
+            return $this->statement->store($path, $disk);
+        }
+
+        return $existingFile;
+    }
 }

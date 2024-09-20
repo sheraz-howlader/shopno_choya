@@ -13,8 +13,10 @@ TODO::Livewire
     store   ___done
     validation   ___done
     update by modal   ___done
+        update korar somoy modal hide hoye jay.
+            wire:ignore.self
     date show on update   ___done
-    file uploading
+    file uploading   ___done
     datepickr   ___done
 
 

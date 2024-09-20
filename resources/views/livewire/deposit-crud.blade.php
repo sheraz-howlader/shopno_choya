@@ -109,10 +109,8 @@
     </div>
 
     {{--Start::Add Entry modal--}}
-    <form  enctype="multipart/form-data" wire:submit.prevent="store" method="post">
-        @csrf
-
-        <div class="modal fade modal-animate" id="addEntry" data-bs-backdrop="static" >
+    <form wire:submit.prevent="store" method="post">
+        <div class="modal fade modal-animate" id="addEntry" data-bs-backdrop="static" wire:ignore.self>
             <div class="modal-dialog">
                 <div class="modal-content">
                     <div class="modal-header">
@@ -138,13 +136,17 @@
                                 <i class="fas fa-calendar-alt"></i>
                             </button>
 
-                            <input type="text" class="form-control flatpickr" readonly="readonly"
+                            <input type="text" class="form-control flatpickr" readonly="readonly" name="payment_date"
                                    placeholder="Payment Date" wire:model="payment_date" data-input>
 
                             <button class="btn btn-info" type="button" id="clear-date">
                                 <i class="fas fa-times"></i>
                             </button>
                         </div>
+
+                        <label for="">Statement</label>
+                        <small class="text-info">(attach for prove your payment)</small>
+                        <input type="file" placeholder="Statement" name="statement" class="form-control my-2" wire:model="statement">
 
                         <label for="">Remark</label>
                         <input type="text" name="remark" placeholder="Write something important" class="form-control my-2" wire:model="remark">
@@ -160,10 +162,8 @@
     {{--End::Add Entry modal--}}
 
     {{--Start::Edit Entry modal--}}
-    <form  enctype="multipart/form-data" wire:submit.prevent="update" method="post">
-        @csrf
-
-        <div class="modal fade modal-animate" id="editEntry">
+    <form wire:submit.prevent="update">
+        <div class="modal fade modal-animate" id="editEntry" wire:ignore.self>
             <div class="modal-dialog">
                 <div class="modal-content">
                     <div class="modal-header">
@@ -183,13 +183,12 @@
                         <input type="number" placeholder="amount" name="amount" class="form-control my-2"  wire:model="amount">
 
                         <label for="" class="required">Payment Date</label>
-
                         <div class="input-group my-2">
                             <button class="btn btn-info" type="button" data-toggle>
                                 <i class="fas fa-calendar-alt"></i>
                             </button>
 
-                            <input type="text" class="form-control flatpickr" readonly="readonly"
+                            <input type="text" class="form-control flatpickr" readonly="readonly" name="payment_date"
                                    placeholder="Payment Date" wire:model="payment_date" data-input>
 
                             <button class="btn btn-info" type="button" id="clear-date">
@@ -197,7 +196,9 @@
                             </button>
                         </div>
 
-                        <input type="hidden" class="sheraz" name="sheraz" value="{{ $payment_date }}">
+                        <label for="">Statement</label>
+                        <small class="text-info">(attach for prove your payment)</small>
+                        <input type="file" placeholder="Statement" name="statement" class="form-control my-2" wire:model="statement">
 
                         <label for="">Remark</label>
                         <input type="text" name="remark" placeholder="Write something important" class="form-control my-2" wire:model="remark">

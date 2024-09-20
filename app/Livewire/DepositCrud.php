@@ -3,28 +3,34 @@
 namespace App\Livewire;
 
 use App\Models\Deposit;
+use App\Services\FileHandlerService;
 use Illuminate\Validation\ValidationException;
 use Livewire\Component;
+use Livewire\WithFileUploads;
 use Livewire\WithPagination;
 
 class DepositCrud extends Component
 {
+    use FileHandlerService;
+    use WithFileUploads;
+
     use WithPagination;
     protected $paginationTheme = 'bootstrap';
 
+    public $users;
     public $user_id;
     public $amount;
     public $payment_date;
     public $remark;
-    public $users;
     public $depositId;
-    public $updateMode = false;
+    public $statement;
 
     protected $rules = [
         'user_id'   => 'required|exists:users,id',
         'amount'    => 'required|numeric',
         'payment_date' => 'required|date',
         'remark'       => 'nullable|string',
+        'statement'    => 'nullable|file|mimes:jpg,png,pdf,txt,xlsx',
     ];
 
     public function mount($users) {
@@ -38,19 +44,20 @@ class DepositCrud extends Component
         $this->payment_date = '';
         $this->remark = '';
         $this->depositId = null;
-        $this->updateMode = false;
     }
 
     public function store()
     {
         try {
             $this->validate();
+            $file = $this->uploadViaDisk($this->statement, 'backend/images/statements/', '', 'personal_disk'); //'personal_disk' is a custom disk name
 
             Deposit::create([
                 'user_id'   => $this->user_id,
                 'amount'    => $this->amount,
                 'payment_at'=> $this->payment_date,
                 'remark'    => $this->remark,
+                'statement_file' => $file ?? null,
             ]);
 
             // Emit event to close the modal
@@ -73,31 +80,27 @@ class DepositCrud extends Component
         $this->depositId    = $deposit->id;
         $this->user_id      = $deposit->user_id;
         $this->amount       = $deposit->amount;
-        // $this->payment_date = $deposit->payment_at;
         $this->payment_date = $deposit->payment_at->format('Y-m-d');
+        $this->statement    = $deposit->statement_file;
         $this->remark       = $deposit->remark;
 
         // Emit event to open the modal
         $this->dispatch('openEditModal');
     }
 
-//    public function payment_date()
-//    {
-//        $this->payment_date = 100;
-//    }
-
-
     public function update()
     {
         $this->validate();
-
         $deposit = Deposit::find($this->depositId);
+
+        $file = $this->uploadViaDisk($this->statement, 'backend/images/statements/', $deposit->statement_file, 'personal_disk'); //'personal_disk' is a custom disk name
 
         $deposit->update([
             'user_id'   => $this->user_id,
             'amount'    => $this->amount,
             'payment_at'=> $this->payment_date,
             'remark'    => $this->remark,
+            'statement_file' => $file ?? $deposit->statement_file,
         ]);
 
         // Emit event to close the modal
@@ -109,7 +112,10 @@ class DepositCrud extends Component
 
     public function delete($id)
     {
-        Deposit::find($id)->delete();
+        $deposit = Deposit::findOrFail($id);
+        $this->removeFile($deposit->statement_file);
+
+        $deposit->delete();
         session()->flash('success', 'Deposit deleted successfully.');
     }
 
