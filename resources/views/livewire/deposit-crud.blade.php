@@ -70,16 +70,20 @@
                                                         <td class="text-center">
                                                             @canany(['deposit::deposit-approve'])
                                                                 @if(($deposit->payment_status === 'pending'))
-                                                                    <button type="button" class="btn btn-success btn-sm" onclick="approve({{$deposit->id}})">
+                                                                    <button type="button" class="btn btn-success btn-sm" wire:click="approve({{$deposit->id}})">
                                                                         <div class="spinner-grow spinner-grow-sm" role="status"></div>
                                                                         Approve
                                                                     </button>
                                                                 @endif
                                                             @endcanany
 
-                                                                <button class="btn btn-primary btn-sm" wire:click="edit({{ $deposit->id }})">Edit</button>
+                                                            @canany(['deposit::edit'])
+                                                                <button class="btn btn-primary btn-sm" wire:click="edit({{ $deposit->id }})"> Edit </button>
+                                                            @endcanany
 
-                                                                <button class="btn btn-danger btn-sm deleteBTN" wire:click="delete({{ $deposit->id }})" onclick="confirm('Are you sure?')">Delete</button>
+                                                            @canany(['deposit::destroy'])
+                                                                <button class="btn btn-danger btn-sm" wire:click.prevent="confirmDelete({{ $deposit->id }})">Delete</button>
+                                                            @endcanany
                                                         </td>
                                                     @else
                                                         <td class="text-center">
@@ -204,7 +208,6 @@
                         <input type="text" name="remark" placeholder="Write something important" class="form-control my-2" wire:model="remark">
                     </div>
                     <div class="modal-footer">
-                        {{--<button type="button" class="btn btn-outline-secondary btn-sm" data-bs-dismiss="modal">Close</button>--}}
                         <button type="button" class="btn btn-outline-secondary btn-sm" id="closeModalBtn">Close</button>
                         <button type="submit" class="btn btn-primary shadow-2 btn-sm">Save</button>
                     </div>
@@ -285,6 +288,39 @@
             window.addEventListener('closeEditModal', event => {
                 let modal = bootstrap.Modal.getInstance(document.getElementById('editEntry'));
                 modal.hide();
+            });
+
+            Livewire.on('deposit_approved', () => {
+                Swal.fire({
+                    text: "Deposit has been approved successfully.",
+                    icon: 'success'
+                });
+            });
+
+            window.addEventListener('showDeleteConfirmation', function (event) {
+                // Extract the id from the event
+                const id = event.detail[0];
+
+                Swal.fire({
+                    text: "Are you sure you want to delete? This action cannot be undone.",
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#d33',
+                    cancelButtonColor: '#3085d6',
+                    confirmButtonText: 'Yes, delete it!'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        @this.delete(id);
+                    }
+                });
+            });
+
+            // show a success message after deletion
+            Livewire.on('deletedSuccessfully', () => {
+                Swal.fire({
+                    text: "Deposit deleted successfully.",
+                    icon: 'success'
+                });
             });
         });
     </script>

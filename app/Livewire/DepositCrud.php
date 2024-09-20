@@ -4,6 +4,7 @@ namespace App\Livewire;
 
 use App\Models\Deposit;
 use App\Services\FileHandlerService;
+use App\Services\MailSender;
 use Illuminate\Validation\ValidationException;
 use Livewire\Component;
 use Livewire\WithFileUploads;
@@ -13,7 +14,7 @@ class DepositCrud extends Component
 {
     use FileHandlerService;
     use WithFileUploads;
-
+    use MailSender;
     use WithPagination;
     protected $paginationTheme = 'bootstrap';
 
@@ -30,7 +31,7 @@ class DepositCrud extends Component
         'amount'    => 'required|numeric',
         'payment_date' => 'required|date',
         'remark'       => 'nullable|string',
-        'statement'    => 'nullable|file|mimes:jpg,png,pdf,txt,xlsx',
+        //'statement'    => 'nullable|file|mimes:jpg,png,pdf,txt,xlsx',
     ];
 
     public function mount($users) {
@@ -110,13 +111,40 @@ class DepositCrud extends Component
         session()->flash('success', 'Deposit updated successfully.');
     }
 
+    public function confirmDelete($id)
+    {
+        // Emit an event to trigger SweetAlert
+        $this->dispatch('showDeleteConfirmation', $id);
+    }
+
     public function delete($id)
     {
         $deposit = Deposit::findOrFail($id);
         $this->removeFile($deposit->statement_file);
 
         $deposit->delete();
-        session()->flash('success', 'Deposit deleted successfully.');
+        $this->dispatch('deletedSuccessfully');
+    }
+
+    public function approve($id)
+    {
+        $deposit = Deposit::findOrFail($id);
+        $deposit->update([
+            'payment_status' => 'confirm'
+        ]);
+
+        $data = [
+            'subject'   => 'Your deposit has been approved',
+            'template'  => 'emails.deposit_approved',
+            'name'      => $deposit->user->name,
+            'amount'    => $deposit->amount,
+            'payment_date'    => $deposit->payment_at->format('d M Y'),
+            'approve_date'    => now()->format('d M Y'),
+            'approve_by'      => auth()->user()->name,
+            'mail_to'         => $deposit->user->email,
+        ];
+        $this->emailSend($data);
+        $this->dispatch('deposit_approved');
     }
 
     public function render()
