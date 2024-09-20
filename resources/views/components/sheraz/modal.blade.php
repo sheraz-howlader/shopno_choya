@@ -18,7 +18,7 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-outline-secondary btn-sm" data-bs-dismiss="modal">Close</button>
-                    <button type="submit" class="btn btn-primary shadow-2 btn-sm" btn-sm>Save</button>
+                    <button type="submit" class="btn btn-primary shadow-2 btn-sm">Save</button>
                 </div>
             </div>
         </div>

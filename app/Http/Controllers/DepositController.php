@@ -23,31 +23,9 @@ class DepositController extends Controller
     {
         abort_if(Gate::none(['deposit::list']), Response::HTTP_FORBIDDEN);
 
-        $search   = request()->get('search');
-        $filters  = request()->get('filter');
-
         $users = User::where('status', 1)->get();
 
-        $deposits = Deposit::query()->with('user', 'user.role')
-            ->when(isset($search), function ($query) use ($search) {
-                $query->whereHas('user', function ($query) use ($search) {
-                    $query->where('name', 'like', '%' . $search . '%')
-                        ->orwhere('email', 'like', '%' . $search . '%')
-                        ->orwhere('phone_no', 'like', '%' . $search . '%');
-                });
-            })
-            ->when(isset($filters['status']), function ($query) use ($filters) {
-                $query->where('payment_status', $filters['status']);
-            })
-            ->when(isset($filters['date']), function ($query) use ($filters) {
-                $query->where('payment_at', $filters['date']);
-            })
-            //->whereMonth('payment_at', now()->month)
-            ->orderBy('payment_at', 'desc')
-            ->paginate(20)
-            ->withQueryString();
-
-        return view('backend.deposits.index', compact('users', 'deposits', 'search', 'filters'));
+        return view('backend.deposits.index', compact('users'));
     }
 
     public function getAllDeposits(Request $request): void

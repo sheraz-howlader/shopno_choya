@@ -23,16 +23,4 @@
 
 @push('scripts')
     <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
-
-{{--    <script>--}}
-{{--        // date picker--}}
-{{--        $('.flatpickr').flatpickr({--}}
-{{--            altInput: true,--}}
-{{--            dateFormat: "Y-m-d",--}}
-{{--            enableTime: false,--}}
-{{--            altFormat: "d/m/y",--}}
-{{--            wrap: true,--}}
-{{--            mode: "range",--}}
-{{--        });--}}
-{{--    </script>--}}
 @endpush

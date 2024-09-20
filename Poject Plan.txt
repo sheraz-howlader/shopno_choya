@@ -5,7 +5,15 @@ Notice -
     Notice board theke. Apps a dhukle notice dekha jabe + notice dile mail a pathiye dewa hobe.
 
 =========================//============================
-TODO::
+TODO::Livewire
+    show   ___done
+    filter   ___done
+    search   ___done
+    pagination
+    store
+    validation
+    update by modal
+
 
 
 

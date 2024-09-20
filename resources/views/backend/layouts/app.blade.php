@@ -94,7 +94,6 @@
 
 <script src="https://cdn.jsdelivr.net/npm/phosphor-icons@1.4.2/src/index.min.js"></script>
 
-
 <script>
     let preloader = document.getElementById("loading");
     function myFunction(){
