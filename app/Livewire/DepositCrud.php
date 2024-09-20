@@ -9,6 +9,7 @@ use Livewire\WithPagination;
 class DepositCrud extends Component
 {
     use WithPagination;
+    protected $paginationTheme = 'bootstrap';
 
     public $user_id;
     public $amount;
@@ -22,7 +23,7 @@ class DepositCrud extends Component
         'user_id'   => 'required|exists:users,id',
         'amount'    => 'required|numeric',
         'payment_date' => 'required|date',
-        'remark'    => 'nullable|string',
+        'remark'       => 'nullable|string',
     ];
 
     public function mount($users) {

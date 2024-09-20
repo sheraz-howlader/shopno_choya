@@ -9,10 +9,10 @@ TODO::Livewire
     show   ___done
     filter   ___done
     search   ___done
-    pagination
-    store
-    validation
-    update by modal
+    pagination   ___done
+    store   ___done
+    validation   ___done
+    update by modal   ___done
 
 
 
