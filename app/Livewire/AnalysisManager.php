@@ -5,7 +5,7 @@ namespace App\Livewire;
 use App\Models\Deposit;
 use Livewire\Component;
 
-class Analysis extends Component
+class AnalysisManager extends Component
 {
     public $dateRange;
     public $status;
@@ -58,7 +58,7 @@ class Analysis extends Component
             ->withQueryString();
 
 
-        return view('livewire.analysis', [
+        return view('livewire.analysis-manager', [
             'deposits'  => $deposits,
             'dateRange' => $this->dateRange,
             'status' => $this->status,

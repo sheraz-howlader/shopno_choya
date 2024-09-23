@@ -6,7 +6,7 @@
 
 @section('contents')
 
-    <livewire:deposit-crud :users="$users"></livewire:deposit-crud>
+    <livewire:deposit-manager :users="$users"></livewire:deposit-manager>
 
 @endsection
 

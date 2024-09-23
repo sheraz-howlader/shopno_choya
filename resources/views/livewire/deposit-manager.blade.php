@@ -3,6 +3,9 @@
         <div class="page-header-title border-bottom pb-2 mb-4 d-flex align-items-center justify-content-between">
             <h4 class="">
                 Deposit List - <small> {{now()->format('F')}} </small>
+                <a wire:click="$refresh" class="mx-1 cursor-grab" style="cursor: pointer">
+                    <i class="fas fa-sync-alt text-info"></i>
+                </a>
             </h4>
             @canany(['deposit::create'])
                 <button href="" class="btn btn-primary btn-sm" data-pc-animate="fall" id="openModalBtn">
@@ -38,7 +41,7 @@
 
                                     <x-slot:tbody>
                                         @forelse($deposits as $deposit)
-                                            <tr>
+                                            <tr wire:key="{{ $deposit->id }}">
                                                 <td class="text-center"> {{ $loop->index + $deposits->firstItem() }} </td>
                                                 <td>
                                                     <img src="{{ asset($deposit->user->thumbnail()) }}" alt="{{ $deposit->user->name }}"
@@ -70,9 +73,20 @@
                                                         <td class="text-center">
                                                             @canany(['deposit::deposit-approve'])
                                                                 @if(($deposit->payment_status === 'pending'))
-                                                                    <button type="button" class="btn btn-success btn-sm" wire:click="approve({{$deposit->id}})">
-                                                                        <div class="spinner-grow spinner-grow-sm" role="status"></div>
+                                                                    <button type="button" class="btn btn-success btn-sm"
+                                                                            x-data="approveBTN"
+                                                                            x-on:livewire:load="loading"
+                                                                            x-bind:class="{ 'd-none': loading }"
+                                                                            x-on:click="loading = true"
+                                                                            wire:click="approve({{ $deposit->id }})"
+                                                                            wire:loading.attr="disabled"
+                                                                    >
+                                                                        <div class="spinner-grow spinner-grow-sm"></div>
                                                                         Approve
+                                                                    </button>
+
+                                                                    <button wire:loading wire:target="approve({{ $deposit->id }})" type="button" class="btn btn-secondary btn-sm">
+                                                                       Processing...
                                                                     </button>
                                                                 @endif
                                                             @endcanany
@@ -153,7 +167,8 @@
                         <input type="file" placeholder="Statement" name="statement" class="form-control my-2" wire:model="statement">
 
                         <label for="">Remark</label>
-                        <input type="text" name="remark" placeholder="Write something important" class="form-control my-2" wire:model="remark">
+                        <input type="text" name="remark" placeholder="Write something important" class="form-control my-2" wire:model="remark" wire:dirty.class="border border-info">
+                        <div wire:dirty wire:target="remark">Unsaved...</div>
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-outline-secondary btn-sm" data-bs-dismiss="modal">Close</button>
@@ -222,7 +237,7 @@
 @push('scripts')
     <script>
         // Make sure the DOM is fully loaded before running this script
-        document.addEventListener('DOMContentLoaded', function () {
+        document.addEventListener('livewire:init', function () {
             //addEntry
             const openModalBtn = document.getElementById('openModalBtn');
             openModalBtn.addEventListener('click', function () {
@@ -297,9 +312,9 @@
                 });
             });
 
-            window.addEventListener('showDeleteConfirmation', function (event) {
+            window.addEventListener('show-confirmation', function (event) {
                 // Extract the id from the event
-                const id = event.detail[0];
+                const id = event.detail.id;
 
                 Swal.fire({
                     text: "Are you sure you want to delete? This action cannot be undone.",
@@ -316,12 +331,18 @@
             });
 
             // show a success message after deletion
-            Livewire.on('deletedSuccessfully', () => {
+            Livewire.on('deleted', () => {
                 Swal.fire({
                     text: "Deposit deleted successfully.",
                     icon: 'success'
                 });
             });
         });
+    </script>
+
+    <script>
+        Alpine.data('approveBTN', () => ({
+            loading: false
+        }))
     </script>
 @endpush

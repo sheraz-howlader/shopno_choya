@@ -13,9 +13,7 @@
 
             @include('backend.layouts.notification')
 
-
-            <livewire:analysis></livewire:analysis>
-
+            <livewire:analysis-manager></livewire:analysis-manager>
 
         </div>
     </div>

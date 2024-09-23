@@ -18,6 +18,7 @@ TODO::Livewire
     date show on update   ___done
     file uploading   ___done
     datepickr   ___done
+    Alpinejs CRUD
 
 
 

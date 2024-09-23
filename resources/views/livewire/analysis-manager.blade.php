@@ -115,7 +115,7 @@
 
 @push('scripts')
     <script>
-        document.addEventListener('DOMContentLoaded', function () {
+        document.addEventListener('livewire:init', function () {
             // Get all elements with class .flatpickr
             const flatpickrInstances = document.querySelectorAll('.flatpickr');
             flatpickrInstances.forEach((element) => {

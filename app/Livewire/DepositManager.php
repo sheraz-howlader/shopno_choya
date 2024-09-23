@@ -6,48 +6,60 @@ use App\Models\Deposit;
 use App\Services\FileHandlerService;
 use App\Services\MailSender;
 use Illuminate\Validation\ValidationException;
+use Livewire\Attributes\Locked;
+use Livewire\Attributes\Validate;
 use Livewire\Component;
 use Livewire\WithFileUploads;
 use Livewire\WithPagination;
 
-class DepositCrud extends Component
+class DepositManager extends Component
 {
-    use FileHandlerService;
     use WithFileUploads;
+    use FileHandlerService;
     use MailSender;
     use WithPagination;
     protected $paginationTheme = 'bootstrap';
 
     public $users;
+    #[Validate('required|exists:users,id')]
     public $user_id;
+    #[Validate('required|numeric')]
     public $amount;
+    #[Validate('required|date')]
     public $payment_date;
+    #[Validate('nullable|string')]
     public $remark;
-    public $depositId;
+    #[Validate('nullable|file|mimes:jpg,png,pdf,txt,xlsx')]
     public $statement;
+    #[Locked] //Locking the property for prevent malicious attack
+    public $depositId;
 
-    protected $rules = [
-        'user_id'   => 'required|exists:users,id',
-        'amount'    => 'required|numeric',
-        'payment_date' => 'required|date',
-        'remark'       => 'nullable|string',
-        //'statement'    => 'nullable|file|mimes:jpg,png,pdf,txt,xlsx',
-    ];
+    //protected $rules = [
+    //    'user_id'   => 'required|exists:users,id',
+    //    'amount'    => 'required|numeric',
+    //    'payment_date' => 'required|date',
+    //    'remark'       => 'nullable|string',
+    //    'statement'    => 'nullable|file|mimes:jpg,png,pdf,txt,xlsx',
+    //];
 
-    public function mount($users) {
-        $this->users = $users;
-    }
+    //same name a property thakle mount() method a init kora lage na
+    //public function mount($users): void
+    //{
+    //    $this->users = $users;
+    //}
 
-    public function resetInputFields()
+    public function resetInputFields(): void
     {
-        $this->user_id = '';
-        $this->amount = '';
-        $this->payment_date = '';
-        $this->remark = '';
-        $this->depositId = null;
+        //$this->reset('user_id');
+        //$this->reset('amount');
+        //$this->reset('payment_date');
+        //$this->reset('remark');
+        //$this->reset('depositId');
+
+        $this->reset(['user_id', 'amount', 'payment_date', 'remark', 'depositId', 'statement']);
     }
 
-    public function store()
+    public function store(): void
     {
         try {
             $this->validate();
@@ -74,7 +86,7 @@ class DepositCrud extends Component
         }
     }
 
-    public function edit($id)
+    public function edit($id): void
     {
         $deposit = Deposit::findOrFail($id);
 
@@ -89,7 +101,7 @@ class DepositCrud extends Component
         $this->dispatch('openEditModal');
     }
 
-    public function update()
+    public function update(): void
     {
         $this->validate();
         $deposit = Deposit::find($this->depositId);
@@ -111,24 +123,25 @@ class DepositCrud extends Component
         session()->flash('success', 'Deposit updated successfully.');
     }
 
-    public function confirmDelete($id)
+    public function confirmDelete($id): void
     {
         // Emit an event to trigger SweetAlert
-        $this->dispatch('showDeleteConfirmation', $id);
+        $this->dispatch('show-confirmation', id: $id);
     }
 
-    public function delete($id)
+    public function delete($id): void
     {
         $deposit = Deposit::findOrFail($id);
         $this->removeFile($deposit->statement_file);
 
         $deposit->delete();
-        $this->dispatch('deletedSuccessfully');
+        $this->dispatch('deleted');
     }
 
-    public function approve($id)
+    public function approve($id): void
     {
         $deposit = Deposit::findOrFail($id);
+
         $deposit->update([
             'payment_status' => 'confirm'
         ]);
@@ -153,7 +166,7 @@ class DepositCrud extends Component
             ->orderBy('payment_at', 'desc')
             ->paginate(20);
 
-        return view('livewire.deposit-crud', [
+        return view('livewire.deposit-manager')->with([
             'deposits' => $deposits,
             'users' => $this->users,
         ]);
