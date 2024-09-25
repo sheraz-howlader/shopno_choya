@@ -3,9 +3,11 @@
 namespace App\Livewire;
 
 use App\Models\Deposit;
+use App\Models\User;
 use App\Services\FileHandlerService;
 use App\Services\MailSender;
 use Illuminate\Validation\ValidationException;
+use Illuminate\View\View;
 use Livewire\Attributes\Locked;
 use Livewire\Attributes\Validate;
 use Livewire\Component;
@@ -14,23 +16,28 @@ use Livewire\WithPagination;
 
 class DepositManager extends Component
 {
-    use WithFileUploads;
     use FileHandlerService;
     use MailSender;
+    use WithFileUploads;
     use WithPagination;
     //protected $paginationTheme = 'bootstrap'; //change from config file
 
-    public $users;
+    //public $users;
     #[Validate('required|exists:users,id')]
     public $user_id;
+
     #[Validate('required|numeric')]
     public $amount;
+
     #[Validate('required|date')]
     public $payment_date;
+
     #[Validate('nullable|string')]
     public $remark;
+
     #[Validate('nullable|file|mimes:jpg,png,pdf,txt,xlsx')]
     public $statement;
+
     #[Locked] //Locking the property for prevent malicious attack
     public $depositId;
 
@@ -66,10 +73,10 @@ class DepositManager extends Component
             $file = $this->uploadViaDisk($this->statement, 'backend/images/statements/', '', 'personal_disk'); //'personal_disk' is a custom disk name
 
             Deposit::create([
-                'user_id'   => $this->user_id,
-                'amount'    => $this->amount,
-                'payment_at'=> $this->payment_date,
-                'remark'    => $this->remark,
+                'user_id' => $this->user_id,
+                'amount' => $this->amount,
+                'payment_at' => $this->payment_date,
+                'remark' => $this->remark,
                 'statement_file' => $file ?? null,
             ]);
 
@@ -90,12 +97,12 @@ class DepositManager extends Component
     {
         $deposit = Deposit::findOrFail($id);
 
-        $this->depositId    = $deposit->id;
-        $this->user_id      = $deposit->user_id;
-        $this->amount       = $deposit->amount;
+        $this->depositId = $deposit->id;
+        $this->user_id = $deposit->user_id;
+        $this->amount = $deposit->amount;
         $this->payment_date = $deposit->payment_at->format('Y-m-d');
-        $this->statement    = $deposit->statement_file;
-        $this->remark       = $deposit->remark;
+        $this->statement = $deposit->statement_file;
+        $this->remark = $deposit->remark;
 
         // Emit event to open the modal
         $this->dispatch('openEditModal');
@@ -109,10 +116,10 @@ class DepositManager extends Component
         $file = $this->uploadViaDisk($this->statement, 'backend/images/statements/', $deposit->statement_file, 'personal_disk'); //'personal_disk' is a custom disk name
 
         $deposit->update([
-            'user_id'   => $this->user_id,
-            'amount'    => $this->amount,
-            'payment_at'=> $this->payment_date,
-            'remark'    => $this->remark,
+            'user_id' => $this->user_id,
+            'amount' => $this->amount,
+            'payment_at' => $this->payment_date,
+            'remark' => $this->remark,
             'statement_file' => $file ?? $deposit->statement_file,
         ]);
 
@@ -143,32 +150,34 @@ class DepositManager extends Component
         $deposit = Deposit::findOrFail($id);
 
         $deposit->update([
-            'payment_status' => 'confirm'
+            'payment_status' => 'confirm',
         ]);
 
         $data = [
-            'subject'   => 'Your deposit has been approved',
-            'template'  => 'emails.deposit_approved',
-            'name'      => $deposit->user->name,
-            'amount'    => $deposit->amount,
-            'payment_date'    => $deposit->payment_at->format('d M Y'),
-            'approve_date'    => now()->format('d M Y'),
-            'approve_by'      => auth()->user()->name,
-            'mail_to'         => $deposit->user->email,
+            'subject' => 'Your deposit has been approved',
+            'template' => 'emails.deposit_approved',
+            'name' => $deposit->user->name,
+            'amount' => $deposit->amount,
+            'payment_date' => $deposit->payment_at->format('d M Y'),
+            'approve_date' => now()->format('d M Y'),
+            'approve_by' => auth()->user()->name,
+            'mail_to' => $deposit->user->email,
         ];
         $this->emailSend($data);
         $this->dispatch('deposit_approved');
     }
 
-    public function render()
+    public function render(): View
     {
+        $users = User::whereStatus(1)->get();
+
         $deposits = Deposit::query()->with('user', 'user.role')
             ->orderBy('payment_at', 'desc')
             ->paginate(20);
 
         return view('livewire.deposit-manager')->with([
             'deposits' => $deposits,
-            'users' => $this->users,
-        ]);
+            'users' => $users,
+        ])->extends('components.layouts.app')->section('contents');
     }
 }

@@ -12,7 +12,9 @@ class AnalysisManager extends Component
     use WithPagination;
 
     public $dateRange;
+
     public $status;
+
     public $search;
 
     public function resetFilter(): void
@@ -24,10 +26,10 @@ class AnalysisManager extends Component
     {
         $deposits = Deposit::query()->with('user', 'user.role')
             ->when(isset($this->search), function ($query) {
-                $query->whereHas('user', function ($query){
-                    $query->where('name', 'like', '%' . $this->search . '%')
-                        ->orwhere('email', 'like', '%' . $this->search . '%')
-                        ->orwhere('phone_no', 'like', '%' . $this->search . '%');
+                $query->whereHas('user', function ($query) {
+                    $query->where('name', 'like', '%'.$this->search.'%')
+                        ->orwhere('email', 'like', '%'.$this->search.'%')
+                        ->orwhere('phone_no', 'like', '%'.$this->search.'%');
                 });
             })
             ->when(isset($this->status), function ($query) {
@@ -48,10 +50,10 @@ class AnalysisManager extends Component
             ->withQueryString();
 
         return view('livewire.analysis-manager', [
-            'deposits'  => $deposits,
+            'deposits' => $deposits,
             'dateRange' => $this->dateRange,
             'status' => $this->status,
             'search' => $this->search,
-        ]);
+        ])->extends(config('livewire.layout'))->section('contents');
     }
 }

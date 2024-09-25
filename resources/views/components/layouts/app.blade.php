@@ -26,6 +26,8 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/feather-icon@0.1.0/css/feather.min.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/material-icons@1.13.12/iconfont/material-icons.min.css">
 
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+
     {{--icheck--}}
     <link rel="stylesheet"
           href="https://cdnjs.cloudflare.com/ajax/libs/icheck-bootstrap/3.0.1/icheck-bootstrap.min.css">
@@ -53,11 +55,11 @@
 
 
 <body data-pc-header="header-1" data-pc-preset="preset-1" data-pc-sidebar-theme="light" data-pc-sidebar-caption="true"
-      data-pc-direction="ltr" data-pc-theme="light" onload="myFunction()">
+      data-pc-direction="ltr" data-pc-theme="light">
 
-@persist('loading')
-    <div id="loading"></div>
-@endpersist
+{{--@persist('loading')--}}
+{{--<div id="loading"></div>--}}
+{{--@endpersist--}}
 
 <div class="loader-bg">
     <div class="loader-track">
@@ -80,22 +82,25 @@
 <script src="{{ url('backend/js/plugins/simplebar.min.js') }}"></script>
 <script src="{{ url('backend/js/plugins/bootstrap.min.js') }}"></script>
 <script src="{{ url('backend/js/fonts/custom-font.js') }}"></script>
-<script src="{{ url('backend/js/pcoded.js') }}"></script>
+<script src="{{ url('backend/js/pcoded.js') }}" data-navigate-once></script>
 <script src="{{ url('backend/js/plugins/feather.min.js') }}"></script>
 
 <script src="https://cdn.jsdelivr.net/npm/phosphor-icons@1.4.2/src/index.min.js"></script>
 
-<script>
+<script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+
+<script data-navigate-once>
     let preloader = document.getElementById("loading");
     function myFunction(){
         preloader.style.display = 'none';
     }
 </script>
 
-@livewireScripts
+
 @stack('scripts')
 @include('sweetalert::alert')
-@routes
+@livewireScripts
+{{--@routes--}}
 
 </body>
 </html>

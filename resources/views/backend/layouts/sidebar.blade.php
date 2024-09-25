@@ -23,9 +23,20 @@
                     </li>
                 @endcanany
 
+                {{--@canany(['deposit::list'])--}}
+                {{--    <li class="pc-item {{ Route::is('deposit.*') ? 'active' : '' }}">--}}
+                {{--        <a href="{{ route('deposit.index') }}" class="pc-link">--}}
+                {{--            <span class="pc-micon">--}}
+                {{--                <i class="fas fa-money-check-alt"></i>--}}
+                {{--            </span>--}}
+                {{--            <span class="pc-mtext"> Deposits </span>--}}
+                {{--        </a>--}}
+                {{--    </li>--}}
+                {{--@endcanany--}}
+
                 @canany(['deposit::list'])
-                    <li class="pc-item {{ Route::is('deposit.*') ? 'active' : '' }}">
-                        <a href="{{ route('deposit.index') }}" class="pc-link">
+                    <li class="pc-item">
+                        <a href="/deposit" class="pc-link" wire:navigate>
                             <span class="pc-micon">
                                 <i class="fas fa-money-check-alt"></i>
                             </span>
@@ -33,6 +44,7 @@
                         </a>
                     </li>
                 @endcanany
+
 
                 @canany(['adjustment::list'])
                     <li class="pc-item {{ Route::is('adjustment.*') ? 'active' : '' }}">
@@ -45,8 +57,8 @@
                     </li>
                 @endcanany
 
-                <li class="pc-item {{ Route::is('analysis.*') ? 'active' : '' }}">
-                    <a href="{{ route('analysis') }}" class="pc-link">
+                <li class="pc-item">
+                    <a href="/analysis" class="pc-link" wire:navigate>
                         <span class="pc-micon">
                             <i class="fa-solid fa-chart-pie"></i>
                         </span>
