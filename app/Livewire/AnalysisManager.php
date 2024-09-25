@@ -3,34 +3,24 @@
 namespace App\Livewire;
 
 use App\Models\Deposit;
+use Illuminate\View\View;
 use Livewire\Component;
+use Livewire\WithPagination;
 
 class AnalysisManager extends Component
 {
+    use WithPagination;
+
     public $dateRange;
     public $status;
     public $search;
 
-    public function mount()
-    {
-        $this->dateRange = null;
-        $this->status = null;
-        $this->search = null;
-    }
-    public function submitForm()
-    {
-        //validation here
-    }
-
     public function resetFilter(): void
     {
-        $this->dateRange = null;
-        $this->status = null;
-        $this->search = null;
+        $this->reset(['dateRange', 'status', 'search']);
     }
 
-
-    public function render()
+    public function render(): View
     {
         $deposits = Deposit::query()->with('user', 'user.role')
             ->when(isset($this->search), function ($query) {
@@ -56,7 +46,6 @@ class AnalysisManager extends Component
             ->orderBy('payment_at')
             ->paginate(20)
             ->withQueryString();
-
 
         return view('livewire.analysis-manager', [
             'deposits'  => $deposits,

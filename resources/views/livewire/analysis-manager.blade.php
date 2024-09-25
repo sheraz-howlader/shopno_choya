@@ -1,54 +1,55 @@
 <div class="card">
     <div class="card-body">
         {{--Start::Filter Bar--}}
-        <form wire:change="submitForm" method="get">
-            <div class="row justify-content-end mb-3">
-                <div class="col-md-2 pe-0 mt-2">
-                    <div class="input-group input-group-sm">
-                        <button class="btn btn-info btn-sm" type="button" data-toggle>
-                            <i class="fas fa-calendar-alt"></i>
-                        </button>
+         <div class="row justify-content-end mb-3">
+            <div class="col-md-2 pe-0 mt-2">
+                <div class="input-group input-group-sm">
+                    <button class="btn btn-info btn-sm" type="button" data-toggle>
+                        <i class="fas fa-calendar-alt"></i>
+                    </button>
 
-                        <input type="text" name="filter[date]" class="form-control form-control-sm flatpickr" readonly="readonly"
-                               placeholder="Payment Date" wire:model="dateRange"
-                               value="{{ $dateRange ?? '' }}" data-input>
+                    <input type="text" name="filter[date]" class="form-control form-control-sm flatpickr" wire:model.live="dateRange"
+                           readonly="readonly"
+                           placeholder="Payment Date"
+                           data-input
+                           value="{{ $dateRange ?? '' }}" >
 
-                        <button class="btn btn-info btn-sm" type="button" id="clear-date">
-                            <i class="fas fa-times"></i>
-                        </button>
-                    </div>
-                </div>
-
-                <div class="col-md-1 pe-0 mt-2">
-                    <select name="filter[status]" class="form-control form-control-sm" wire:model="status">
-                        <option selected> Select status</option>
-                        <option
-                            value="confirm" @selected(isset($status) && $status == 'confirm')>
-                            Confirm
-                        </option>
-                        <option
-                            value="pending" @selected(isset($status) && $status == 'pending')>
-                            Pending
-                        </option>
-                    </select>
-                </div>
-
-                <div class="col-md-2 mt-2">
-                    <div class="input-group input-group-sm">
-                        <input type="text" name="search" class="form-control form-control-sm" wire:model="search"
-                               placeholder="name/email/phone" value="{{ $search ?? '' }}">
-
-                        @if (!empty($dateRange) || !empty($status) || !empty($search))
-                            <button class="btn btn-danger btn-sm" wire:click="resetFilter" type="button"
-                               role="button">
-                                <i class="fas fa-sync-alt"></i>
-                                Reset
-                            </button>
-                        @endif
-                    </div>
+                    <button class="btn btn-info btn-sm" type="button" id="clear-date">
+                        <i class="fas fa-times"></i>
+                    </button>
                 </div>
             </div>
-        </form>
+
+            <div class="col-md-1 pe-0 mt-2">
+                <select name="filter[status]" class="form-control form-control-sm" wire:model.live="status">
+                    <option selected> Select status</option>
+                    <option
+                        value="confirm" @selected(isset($status) && $status == 'confirm')>
+                        Confirm
+                    </option>
+                    <option
+                        value="pending" @selected(isset($status) && $status == 'pending')>
+                        Pending
+                    </option>
+                </select>
+            </div>
+
+            <div class="col-md-2 mt-2">
+                <div class="input-group input-group-sm">
+                    <input type="text" name="search" class="form-control form-control-sm" wire:model.live="search"
+                           placeholder="name/email/phone"
+                           value="{{ $search ?? '' }}">
+
+                    @if (!empty($dateRange) || !empty($status) || !empty($search))
+                        <button class="btn btn-danger btn-sm" wire:click="resetFilter" type="button"
+                           role="button">
+                            <i class="fas fa-sync-alt"></i>
+                            Reset
+                        </button>
+                    @endif
+                </div>
+            </div>
+         </div>
         {{--End::Filter Bar--}}
 
         <div class="dt-responsive">

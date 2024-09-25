@@ -18,7 +18,7 @@ class DepositManager extends Component
     use FileHandlerService;
     use MailSender;
     use WithPagination;
-    protected $paginationTheme = 'bootstrap';
+    //protected $paginationTheme = 'bootstrap'; //change from config file
 
     public $users;
     #[Validate('required|exists:users,id')]
