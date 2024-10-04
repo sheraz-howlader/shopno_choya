@@ -91,7 +91,7 @@
                                                 <span class="text-danger"> <i>No Attach file</i> </span>
                                             @endif
                                         </td>
-                                        <td class="text-center"> {!! $deposit->display_status !!} </td>
+                                        <td class="text-center"> {!! $deposit->displayStatus() !!} </td>
                                         <td> {!! $deposit->remark !!} </td>
                                     </tr>
                                 @empty
@@ -116,8 +116,8 @@
 
 
 @push('scripts')
-    <script>
-        document.addEventListener('livewire:navigate', function () {
+    <script data-navigate-once>
+        document.addEventListener('livewire:navigated', function () {
             // Get all elements with class .flatpickr
             const flatpickrInstances = document.querySelectorAll('.flatpickr');
             flatpickrInstances.forEach((element) => {

@@ -108,6 +108,11 @@ class DepositManager extends Component
         $this->dispatch('openEditModal');
     }
 
+    public function openAddModal(): void
+    {
+        $this->dispatch('openAddModal');
+    }
+
     public function update(): void
     {
         $this->validate();
@@ -173,11 +178,11 @@ class DepositManager extends Component
 
         $deposits = Deposit::query()->with('user', 'user.role')
             ->orderBy('payment_at', 'desc')
-            ->paginate(20);
+            ->paginate();
 
         return view('livewire.deposit-manager')->with([
             'deposits' => $deposits,
             'users' => $users,
-        ])->extends('components.layouts.app')->section('contents');
+        ])->extends(config('livewire.layout'))->section('contents');
     }
 }

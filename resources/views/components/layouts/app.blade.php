@@ -16,21 +16,21 @@
 
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
 
-    <link rel="stylesheet" href="{{ url('backend/css/style.css') }}" id="main-style-link">
-    <link rel="stylesheet" href="{{ url('backend/css/style-preset.css') }}">
+    <link rel="stylesheet" href="{{ url('backend/css/style.css') }}" id="main-style-link"  data-navigate-once>
+    <link rel="stylesheet" href="{{ url('backend/css/style-preset.css') }}"  data-navigate-track>
 
-    <script src="https://kit.fontawesome.com/7b81d78297.js" crossorigin="anonymous"></script>
+    <script src="https://kit.fontawesome.com/7b81d78297.js" crossorigin="anonymous"  data-navigate-track></script>
 
     <!--Icons-->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/phosphor-icons@1.4.2/src/css/icons.min.css">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/feather-icon@0.1.0/css/feather.min.css">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/material-icons@1.13.12/iconfont/material-icons.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/phosphor-icons@1.4.2/src/css/icons.min.css"  data-navigate-track>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/feather-icon@0.1.0/css/feather.min.css"  data-navigate-track>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/material-icons@1.13.12/iconfont/material-icons.min.css"  data-navigate-track>
 
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css"  data-navigate-track>
 
     {{--icheck--}}
     <link rel="stylesheet"
-          href="https://cdnjs.cloudflare.com/ajax/libs/icheck-bootstrap/3.0.1/icheck-bootstrap.min.css">
+          href="https://cdnjs.cloudflare.com/ajax/libs/icheck-bootstrap/3.0.1/icheck-bootstrap.min.css"  data-navigate-track>
 
     @stack('styles')
     <style>
@@ -77,17 +77,17 @@
     </div>
 </div>
 
-<script src="https://code.jquery.com/jquery-3.7.1.js"></script>
-<script src="{{ url('backend/js/plugins/popper.min.js') }}"></script>
-<script src="{{ url('backend/js/plugins/simplebar.min.js') }}"></script>
-<script src="{{ url('backend/js/plugins/bootstrap.min.js') }}"></script>
-<script src="{{ url('backend/js/fonts/custom-font.js') }}"></script>
+<script src="https://code.jquery.com/jquery-3.7.1.js" data-navigate-track></script>
+<script src="{{ url('backend/js/plugins/popper.min.js') }}" data-navigate-track></script>
+<script src="{{ url('backend/js/plugins/simplebar.min.js') }}" data-navigate-track></script>
+<script src="{{ url('backend/js/plugins/bootstrap.min.js') }}" data-navigate-track></script>
+<script src="{{ url('backend/js/fonts/custom-font.js') }}" data-navigate-once></script>
 <script src="{{ url('backend/js/pcoded.js') }}" data-navigate-once></script>
-<script src="{{ url('backend/js/plugins/feather.min.js') }}"></script>
+<script src="{{ url('backend/js/plugins/feather.min.js') }}" data-navigate-track></script>
 
-<script src="https://cdn.jsdelivr.net/npm/phosphor-icons@1.4.2/src/index.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/phosphor-icons@1.4.2/src/index.min.js" data-navigate-track></script>
 
-<script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+<script src="https://cdn.jsdelivr.net/npm/flatpickr" data-navigate-track></script>
 
 <script data-navigate-once>
     let preloader = document.getElementById("loading");

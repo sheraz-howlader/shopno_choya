@@ -9,7 +9,8 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 class Adjustment extends Model
 {
     use SoftDeletes;
-    protected $fillable = ['user_id', 'deposit_id' ,'amount', 'payment_status', 'payment_at','remark', 'statement_file'];
+
+    protected $fillable = ['user_id', 'deposit_id', 'amount', 'payment_status', 'payment_at', 'remark', 'statement_file'];
 
     protected $casts = [
         'payment_at' => 'datetime',

@@ -8,7 +8,7 @@
                 </a>
             </h4>
             @canany(['deposit::create'])
-                <button href="" class="btn btn-primary btn-sm" data-pc-animate="fall" id="openModalBtn">
+                <button href="" class="btn btn-primary btn-sm" data-pc-animate="fall" id="openModalBtn" wire:click="openAddModal">
                     <i class="fas fa-plus-circle me-1"></i>
                     New Entry
                 </button>
@@ -49,9 +49,9 @@
 
                                                     {{ $deposit->user->name }}
 
-                                                    @if($deposit->user->role->slug === 'admin')
+                                                    @if(optional($deposit->user->role)->slug === 'admin')
                                                         <span class="badge bg-dark">Admin</span>
-                                                    @elseif($deposit->user->role->slug === 'cashier')
+                                                    @elseif(optional($deposit->user->role)->slug === 'cashier')
                                                         <span class="badge bg-primary">Cashier</span>
                                                     @endif
                                                 </td>
@@ -66,7 +66,7 @@
                                                     @endif
                                                 </td>
                                                 <td> {{ $deposit->payment_at->format('d M Y') }} </td>
-                                                <td class="text-center"> {!! $deposit->display_status !!} </td>
+                                                <td class="text-center"> {!! $deposit->displayStatus() !!} </td>
 
                                                 @canany(['deposit::edit', 'deposit::destroy'])
                                                     @if(!$deposit->is_adjustment)
@@ -92,7 +92,7 @@
                                                             @endcanany
 
                                                             @canany(['deposit::edit'])
-                                                                <button class="btn btn-primary btn-sm" wire:click="edit({{ $deposit->id }})"> Edit </button>
+                                                                <button class="btn btn-primary btn-sm" wire:click.prevent="edit({{ $deposit->id }})"> Edit </button>
                                                             @endcanany
 
                                                             @canany(['deposit::destroy'])
@@ -182,7 +182,7 @@
 
     {{--Start::Edit Entry modal--}}
     <form wire:submit.prevent="update">
-        <div class="modal fade modal-animate" id="editEntry" wire:ignore.self>
+        <div class="modal fade modal-animate" data-bs-backdrop="static" id="editEntry" wire:ignore.self>
             <div class="modal-dialog">
                 <div class="modal-content">
                     <div class="modal-header">
@@ -223,7 +223,7 @@
                         <input type="text" name="remark" placeholder="Write something important" class="form-control my-2" wire:model="remark">
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-outline-secondary btn-sm" id="closeModalBtn">Close</button>
+                        <button type="button" class="btn btn-outline-secondary btn-sm " data-bs-dismiss="modal" aria-label="Close">Close</button>
                         <button type="submit" class="btn btn-primary shadow-2 btn-sm">Save</button>
                     </div>
                 </div>
@@ -234,13 +234,32 @@
 </div>
 
 
+
+
+
+@push('styles')
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css" data-navigate-track>
+@endpush
+
 @push('scripts')
-    <script>
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr" data-navigate-track></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11" data-navigate-track></script>
+@endpush
+
+@push('scripts')
+   <script>
         // Make sure the DOM is fully loaded before running this script
-        document.addEventListener('livewire:init', function () {
+        document.addEventListener('livewire:navigated', function () {
+
+            //Start::prevent event fire multiple time
+            if (window.pageLoaded) {
+                return
+            }
+            window.pageLoaded = true;
+            //End::prevent event fire multiple time
+
             //addEntry
-            const openModalBtn = document.getElementById('openModalBtn');
-            openModalBtn.addEventListener('click', function () {
+            Livewire.on('openAddModal', function () {
                 let modal = new bootstrap.Modal(document.getElementById('addEntry'));
                 modal.show();
 
@@ -261,27 +280,25 @@
                 });
             });
 
-            //close after store or validation
-            window.addEventListener('closeAddModal', event => {
+            //close modal after store or validation
+            Livewire.on('closeAddModal', function () {
                 let modal = bootstrap.Modal.getInstance(document.getElementById('addEntry'));
                 modal.hide();
             });
 
-
-
             //edit modal show
-            window.addEventListener('openEditModal', event => {
+            Livewire.on('openEditModal', function () {
                 let modal = new bootstrap.Modal(document.getElementById('editEntry'));
                 modal.show();
 
                 // Get all elements with class .flatpickr
-                const flatpickrInstances = document.querySelectorAll('.flatpickr');
-                flatpickrInstances.forEach((element) => {
+                const flatpickrInstances = document.querySelector('.flatpickr');
+                // flatpickrInstances.forEach((element) => {
                     // Apply Flatpickr to each element
-                    const instance = flatpickr(element, {
+                    const instance = flatpickr(flatpickrInstances, {
                         dateFormat: "Y-m-d",
                         enableTime: false,
-                        defaultDate: @this.payment_date,
+                       // defaultDate: @this.payment_date,
                     });
 
                     // Clear date functionality
@@ -289,18 +306,12 @@
                         instance.clear() // Clear the date for this instance
                             @this.set('payment_date', null); // Reset the Livewire model
                     });
-                });
-            });
+                // });
+            }, { once: true });
 
-            //close by button
-            const closeModalBtn = document.getElementById('closeModalBtn');
-            closeModalBtn.addEventListener('click', function () {
-                let modal = bootstrap.Modal.getInstance(document.getElementById('editEntry'));
-                modal.hide();
-            });
 
-            //close after update or validation
-            window.addEventListener('closeEditModal', event => {
+            //close modal after update or validation
+            Livewire.on('closeEditModal', event => {
                 let modal = bootstrap.Modal.getInstance(document.getElementById('editEntry'));
                 modal.hide();
             });
@@ -312,9 +323,9 @@
                 });
             });
 
-            window.addEventListener('show-confirmation', function (event) {
+            Livewire.on('show-confirmation', function (event) {
                 // Extract the id from the event
-                const id = event.detail.id;
+                const id = event.id;
 
                 Swal.fire({
                     text: "Are you sure you want to delete? This action cannot be undone.",
@@ -337,12 +348,14 @@
                     icon: 'success'
                 });
             });
-        });
+        }, { once: true })
     </script>
+@endpush
 
-    <script>
+@script
+    <script data-navigate-once>
         Alpine.data('approveBTN', () => ({
             loading: false
         }))
     </script>
-@endpush
+@endscript
